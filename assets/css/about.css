@@ -1,0 +1,74 @@
+/* === ABOUT (nur das Nötigste) =============================== */
+
+/* Rundes Portrait, responsive Größe */
+.about-portrait{
+  width: clamp(300px, 36vw, 460px);
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 9999px;
+  border: 3px solid rgba(0,0,0,.06);
+  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+  margin-inline: auto;
+}
+
+/* Logo-Stack rechts */
+.about-logos{
+  /* Hauptlogo-Größe zentral steuern */
+  --main-size: clamp(540px, 36vw, 360px);  /* ✏️ Einmal ändern */
+  --chip-size: calc(var(--main-size) / 4); /* Unterlogos = 1/2 Hauptlogo */
+  --chip-img:  calc(var(--chip-size) * 0.5); /* Logografik im Chip ~ halbe Chip-Höhe */
+
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+}
+
+.about-logo-main{
+  width: var(--main-size);
+  height: auto;
+}
+
+.about-logos__subs{
+  display: flex;
+  gap: 100px;
+}
+
+/* Chips (Unterlogos) proportional */
+.about-logo-chip{
+  display: inline-grid;
+  place-items: center;
+  width: var(--chip-size);
+  height: var(--chip-size);
+  border-radius: 9999px;
+  border: 2px solid var(--switch-border);
+  transition: filter .2s ease, transform .2s ease, background-color .2s ease;
+}
+.about-logo-chip img{
+  height: var(--chip-img);
+  width: auto;
+  display: block;
+}
+
+/* Farben wie beim Switcher (nicht löschen) */
+.about-logo-chip--s2a{ background: var(--switch-to-a-bg); }
+.about-logo-chip--s2a:hover,
+.about-logo-chip--s2a:focus-visible{ background: var(--switch-to-a-hover); }
+
+.about-logo-chip--bsc{ background: var(--switch-to-b-bg); }
+.about-logo-chip--bsc:hover,
+.about-logo-chip--bsc:focus-visible{ background: var(--switch-to-b-hover); }
+
+/* Sicherheit: Bild IMMER sichtbar, zentriert */
+.about-logo-chip img{
+  display: block;
+  height: var(--chip-img, 28px);  /* nutzt deine Variable, fallback 28px */
+  width: auto;
+  margin: 0 auto;
+}
+
+/* etwas Luft unter Image-Blocks auf Mobile */
+@media (max-width: 991.98px){
+  .about-portrait{ margin-bottom: 30px; }
+  .about-logos{ margin-bottom: 30px; }
+}

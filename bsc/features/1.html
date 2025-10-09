@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Titel des Features – Avineo</title>
+  <meta name="description" content="Kurzbeschreibung dieses Feature-Themas." />
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg">
+  <link rel="icon" href="/assets/icons/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+
+  <!-- Fonts & Bootstrap -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Global + Feature Styles -->
+  <link rel="stylesheet" href="/assets/css/shared.css" />
+  <link rel="stylesheet" href="/assets/css/features.css" />
+</head>
+
+<!-- Wichtig: Switcher abschalten -->
+<body data-section="feature">
+
+  <!-- NAVBAR (ohne Switcher) -->
+  <header class="border-bottom">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container container-wider">
+        <a class="navbar-brand fw-bold" href="#">
+          <img class="nav-logo" src="/assets/img/global/avineo_logo.svg" alt="Avineo">
+          <span class="visually-hidden">Avineo</span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navFeature" aria-controls="navFeature"
+                aria-expanded="false" aria-label="Menü öffnen">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navFeature" class="collapse navbar-collapse">
+          <ul class="navbar-nav ms-auto">
+            <!-- ✏️ Links anpassen -->
+<li class="nav-item"><a class="nav-link menu__link" href="/about/index.html">About</a></li>
+<li class="nav-item ms-lg-3">
+      <a class="btn btn-primary" href="https://t1p.de/CalendarAvineo" target="_blank" rel="noopener">Termin buchen</a>
+</li>
+<!-- S2A (Bereich A) als Icon-Link -->
+<li class="nav-item nav-item--icon">
+  <a class="nav-link nav-logo-link nav-logo--s2a" href="/s2a/index.html" aria-label="Zu Bereich A (S2A)">
+    <img class="nav-logo-icon" src="/assets/img/main/tile-a-logo.svg" alt="">
+    <span class="visually-hidden">Bereich A</span>
+  </a>
+</li>
+
+<!-- BSC (Bereich B) als Icon-Link -->
+<li class="nav-item nav-item--icon">
+  <a class="nav-link nav-logo-link nav-logo--bsc" href="/bsc/index.html" aria-label="Zu Bereich B (BSC)">
+    <img class="nav-logo-icon" src="/assets/img/main/tile-b-logo.svg" alt="">
+    <span class="visually-hidden">Bereich B</span>
+  </a>
+</li></ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="py-4">
+    <div class="container container-wider">
+<section class="feature py-4">
+  <!-- lg: gleiche Höhe beider Spalten -->
+  <div class="row g-4 align-items-center align-items-lg-stretch">
+    <!-- TEXT (links) -->
+    <div class="col-12 col-lg-6 order-2 order-lg-1 feature__body d-lg-flex flex-lg-column">
+      <!-- Abschnitt 1: oben bündig -->
+      <div class="feature__intro">
+        <h1 class="h3 fw-bold mb-2 mt-4 mt-lg-5">Segmentation Sprint</h1>
+        <p class="lead mb-0">
+        „Wie viele Supply Chains managen wir?“<br>
+        In nur einem halben Tag wird aus Komplexität Klarheit: Ihr Führungsteam definiert differenzierte Supply Chains, legt Segment-Policies fest und schafft die Basis für gezielte Steuerung statt One-Size-Fits-All.    
+        </p>
+      </div>
+
+      <!-- Abschnitt 2: nach unten drücken (Desktop) -->
+      <div class="feature__details mt-4 mt-lg-auto pt-0 pt-lg-3">
+        <h2 class="h5 fw-bold mb-2">So funktioniert der Segmentation Sprint</h2>
+        <p>Ein kompakter Workshop-Prozess, der Vielfalt in strukturierte Segmente übersetzt – präzise, datenbasiert und entscheidungsorientiert.</p>
+        <p><strong>Für wen:</strong> Für C-Level-Executives und SCM-Leitungen mit hoher Produkt- oder Kundenvielfalt (6–10 Teilnehmende).<br>
+        <strong>Ziel:</strong> Supply Chains differenzieren, Segment-Policies festlegen und klare Regeln je Segment definieren.<br>
+        <strong>Was passiert:</strong> Ein 4-stündiger Sprint, vorbereitet durch einen kurzen Sponsor-Call und Basisdaten, führt von der Segmentierungslogik über Policy-Definition bis zur Pilot-Freigabe.<br><br>
+        <strong>Ablauf:</strong>
+        <ul>
+          <li>Vorab (30–45 Min) – Sponsor-Call + Light Data (Ways-to-Market, Regionen, Serviceklassen, Produktportfolio)</li>
+          <li>Sprint (4 Std) – Segmentierungs-Raster festlegen · Angebot/Markt-Zuordnung · Policies je Segment · 2 Pilotsegmente mit Quick-Start · KPI-Set je Segment</li>
+          <li>Debrief (24–48 h später, 30 Min) – Finalisierung & Pilot-Freigabe</li>
+        </ul>
+        <a class="btn btn-outline-secondary" href="/bsc/index.html">Zurück zu BSC</a>
+      </div>
+    </div>
+
+    <!-- BILD (rechts) -->
+    <div class="col-12 col-lg-6 order-1 order-lg-2 feature__media">
+      <div class="h-100">
+        <img src="/assets/img/features/s2a/f1/feature-1.jpg"
+             alt="Bildbeschreibung"
+             class="img-fluid rounded-2 feature-img--cover-lg">
+      </div>
+    </div>
+  </div>
+</section>
+
+      <!-- FEATURE-BLOCK 2 — Bild links, Text rechts | mobil: Bild oben -->
+      <section class="feature py-4">
+        <div class="row align-items-center g-4">
+          <div class="col-12 col-lg-6 order-1 order-lg-1 feature__media">
+            <img src="/assets/img/features/s2a/f1/feature-2.jpg" alt="Bildbeschreibung" class="img-fluid rounded-2">
+          </div>
+          <div class="col-12 col-lg-6 order-2 order-lg-2 feature__body">
+            <h2 class="h4 fw-bold mb-2">Ergebnisse, Aufwand & Rahmen</h2><br>
+            <h3 class="h5 fw-semibold">Ihr Nutzen (Deliverables)</h3>
+            <ul>
+              <li>Segmentation Matrix (visualisiert & editierbar)</li>
+              <li>Policy Sheets je Segment (mit strategischem Leistungsfokus)</li>
+              <li>Pilot-Implementierung (2 Segmente) mit 90-Tage-Plan</li>
+              <li>Segment-KPI-Dashboard-Blueprint</li>
+            </ul>
+            <h3 class="h5 fw-semibold">Aufwand</h3>
+            <ul>
+              <li>Vorbereitung: 30–45 Min Sponsor-Call + Basisdaten (Marktkanäle, Produktportfolio, Serviceklassen)</li>
+              <li>Sprinttag: 4 Std fokussierter Workshop (keine Paralleltermine)</li>
+              <li>Nachlauf: 30 Min Debrief</li>
+            </ul>
+            <h3 class="h5 fw-semibold">Rahmen & Voraussetzungen</h3>
+            <ul>
+              <li>Entscheider und Prozess-Owner (Plan, Source, Make, Deliver) am Tisch</li>
+              <li>Deutsch oder Englisch | on-site (Beamer/Whiteboard) oder remote (Teams + Miro) | NDA auf Wunsch</li>
+            </ul>
+            <h3 class="h5 fw-semibold">Optional <u>(empfohlen)</u></h3>
+            <ul>
+              <li><strong>BSC 2 - Operating Model Sprint:</strong> E2E-Big Picture vor oder nach der Segmentierung schärfen</li>
+              <li><strong>BSC 3 – Roadmap (4 Wochen):</strong> Segment-Policies in ein wirksames SCM-Projektportfolio übersetzen</li>
+              <li><strong>BSC 4 – Transformation Programme (3 Monate):</strong> Design-/Roll-out-Vorbereitung inkl. „Learn-to-Do-It-Yourself“</li>
+              <li><strong>Master-Data Health-Check:</strong> Parameter-Tuning (Sicherheitsbestände, MOQ, Lead Times)</li>
+            </ul>
+            <blockquote class="pull-quote mb-3">„Kurzes Statement / Mini-Zitat als Akzent????“</blockquote>
+            <a class="btn btn-primary" href="#" target="_blank" rel="noopener">Termin buchen</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Optional: weitere Feature-Blöcke einfach kopieren -->
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer py-4">
+    <div class="container container-wider">
+      <hr class="my-3">
+      <div class="small d-flex flex-wrap gap-3 legal">
+        <span>© <span id="year"></span> Avineo</span>
+        <a class="text-decoration-none" href="/legal/impressum.html">Impressum</a>
+        <a class="text-decoration-none" href="/legal/datenschutz.html">Datenschutz</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/shared.js" defer></script>
+</body>
+</html>
