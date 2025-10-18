@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Avineo – S2A</title>
+  <meta name="description" content="Kurzbeschreibung Bereich A." />
+
+  <!-- Favicons (relativ zur s2a/index.html: eine Ebene hoch) -->
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="icon" href="../assets/icons/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
+
+  <!-- Fonts & Bootstrap -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Shared (global) + Page CSS (relativ: eine Ebene hoch) -->
+  <link rel="stylesheet" href="../assets/css/shared.css" />
+  <link rel="stylesheet" href="../assets/css/s2a.css"/>
+
+  <!-- JavaScript (deferred im Head) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="../assets/js/shared.js"></script>
+  <script defer src="../assets/js/s2a.js"></script>
+</head>
+<body data-section="a">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container container-wider">
+        <a class="navbar-brand brand" href="../index.html">
+          <img class="nav-logo" src="../assets/img/global/avineo_logo.svg" alt="Avineo" />
+          <span class="visually-hidden">Avineo</span>
+        </a>
+
+        <button class="navbar-toggler menu__toggle" type="button" data-bs-toggle="collapse" data-bs-target="#navA"
+                aria-controls="navA" aria-expanded="false" aria-label="Menü öffnen">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navA" class="collapse navbar-collapse">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link menu__link" href="../about/index.html">About</a></li>
+            <li class="nav-item ms-lg-3">
+              <a class="btn btn-primary" href="https://t1p.de/CalendarAvineo" target="_blank" rel="noopener">Termin buchen</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO (Bild via CSS) -->
+    <section class="hero hero--a container-fluid">
+      <div class="container py-5">
+        <h1 class="display-6 fw-bold mb-2">Klarheit schaffen.<br> Fokus halten.<br>Ergebnis sehen.</h1>
+        <br>
+        <p class="lead mb-3">Sprints, Roadmap und Leadership Operating System für Tempo und Verlässlichkeit. </p>
+        <div class="d-flex gap-2">
+          <a class="btn btn-primary" href="#features">S2A-Module</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Anker für "Leistungen" -->
+    <div id="features" class="visually-hidden" aria-hidden="true"></div>
+
+    <div style="height: 2rem;"></div>
+    <!-- FEATURE 1 — Bild links (Desktop) -->
+    <section class="feature feature--image-left container py-4" id="section-1">
+      <div class="row align-items-center g-4">
+        <div class="feature__media col-12 col-lg-6 order-1 order-lg-1">
+          <img src="../assets/img/s2a/s2a-1.jpg" alt="Kurze Bildbeschreibung" class="img-fluid rounded" />
+        </div>
+        <div class="feature__body col-12 col-lg-6 order-2 order-lg-2">
+          <h2 class="h4 fw-bold mb-2">Leadership Sprint (½ Tag)</h2>
+          <p class="mb-3">Führung entlan der Wertschöpfung<br>
+          Ihr Wirkungsbild in 4 Std - mit klaren Next Steps.<br>
+        Top-3-Hebel | 30-Tage-Plan | Führungs-Cadence</p>
+          <a class="btn btn-primary" href="features/1.html" target="_self">mehr...</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURE 2 — Bild rechts (Desktop) -->
+    <section class="feature feature--image-right container py-4" id="section-2">
+      <div class="row align-items-center g-4">
+        <div class="feature__media col-12 col-lg-6 order-1 order-lg-2">
+          <img src="../assets/img/s2a/s2a-2.jpg" alt="Kurze Bildbeschreibung" class="img-fluid rounded" />
+        </div>
+        <div class="feature__body col-12 col-lg-6 order-2 order-lg-1">
+          <h2 class="h4 fw-bold mb-2">S2A Roadmap (4 Wochen)</h2>
+          <p class="mb-3">Von Vision/Strategie zur fokussierten Umsetzung - in 4 Wochen.<br>
+          Entscheidungsboard | Umsetzungsfahrplan</p>
+          <a class="btn btn-primary" href="features/2.html" target="_self">mehr...</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURE 3 — Bild links (Desktop) -->
+    <section class="feature feature--image-left container py-4" id="section-3">
+      <div class="row align-items-center g-4">
+        <div class="feature__media col-12 col-lg-6 order-1 order-lg-1">
+          <img src="../assets/img/s2a/s2a-3.jpg" alt="Kurze Bildbeschreibung" class="img-fluid rounded" />
+        </div>
+        <div class="feature__body col-12 col-lg-6 order-2 order-lg-2">
+          <h2 class="h4 fw-bold mb-2">Leadership Operating System - LOS (3 Monate)</h2>
+          <p class="mb-3">Führung mit System: klare Rollen, konsequente Cadence, sichtbare Ergebnisse.<br>
+          KPI-Cascade | Decision Rhythm | Accountability</p>
+          <a class="btn btn-primary" href="features/3.html" target="_self">mehr...</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURE 4 — Bild rechts (Desktop) -->
+    <section class="feature feature--image-right container py-4" id="section-4">
+      <div class="row align-items-center g-4">
+        <div class="feature__media col-12 col-lg-6 order-1 order-lg-2">
+          <img src="../assets/img/s2a/s2a-4.jpg" alt="Kurze Bildbeschreibung" class="img-fluid rounded" />
+        </div>
+        <div class="feature__body col-12 col-lg-6 order-2 order-lg-1">
+          <h2 class="h4 fw-bold mb-2">Management Sparring (Retainer)</h2>
+          <p class="mb-3">IBP/S&OP auf Entscheider-Niveau: schneller entscheiden, Bias senken.<br>
+          messbare Fortschritte | Entscheidungen | Kennzahlen-Impulse</p>
+          <a class="btn btn-primary" href="features/4.html" target="_self">mehr...</a>
+        </div>
+      </div>
+    </section>
+    
+    <!-- CTA -->
+    <section class="cta container py-4 text-center">
+      <h2 class="h4 mb-3">Bereit für ein Gespräch?</h2>
+      <a class="btn btn-primary btn-lg" href="https://t1p.de/CalendarAvineo" target="_blank" rel="noopener">Termin buchen</a>
+    </section>
+
+    <!-- FAQ (eigenständig einfügbar) -->
+<section class="footer-faq container py-3">
+  <h2 class="h5 mb-3">FAQ</h2>
+
+  <!-- WICHTIG: ID pro Seite eindeutig wählen -->
+  <div class="accordion" id="faq-a">
+    <!-- Item 1 -->
+    <div class="accordion-item">
+      <h3 class="accordion-header" id="faq-a-h1">
+        <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#faq-a-c1"
+                aria-expanded="false" aria-controls="faq-a-c1">
+        Warum reicht ein halber Tag?
+        </button>
+      </h3>
+      <div id="faq-a-c1" class="accordion-collapse collapse"
+           aria-labelledby="faq-a-h1" data-bs-parent="#faq-a">
+        <div class="accordion-body">
+          Weil wir mit einem Light-Datenset und klarer Moderation nur die 20 % besprechen, die 80 % der Wirkung erklären. Ergebnis ist kein Bericht, sondern ein beschlussfähiger Next-Step. 
+        </div>
+      </div>
+    </div>
+
+    <!-- Item 2 -->
+    <div class="accordion-item">
+      <h3 class="accordion-header" id="faq-a-h2">
+        <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#faq-a-c2"
+                aria-expanded="false" aria-controls="faq-a-c2">
+          Brauchen Sie große Datenmengen vorab?
+        </button>
+      </h3>
+      <div id="faq-a-c2" class="accordion-collapse collapse"
+           aria-labelledby="faq-a-h2" data-bs-parent="#faq-a">
+        <div class="accordion-body">
+          Nein. Für den Sprint genügen Standard-KPIs (DOH/OTIF/Backlog/Volatilität) und 2 - 3 Pareto-Sichten. Tiefer gehen wir erst in der Roadmap. 
+        </div>
+      </div>
+    </div>
+
+    <!-- Item 3 -->
+    <div class="accordion-item">
+      <h3 class="accordion-header" id="faq-a-h3">
+        <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#faq-a-c3"
+                aria-expanded="false" aria-controls="faq-a-c3">
+          Remote oder vor Ort?
+        </button>
+      </h3>
+      <div id="faq-a-c3" class="accordion-collapse collapse"
+           aria-labelledby="faq-a-h3" data-bs-parent="#faq-a">
+        <div class="accordion-body">
+          Beides. Remote spart Zeit; on-site ist besser für Dynamik. Wir entscheiden pragmatisch nach Team und Ziel. 
+        </div>
+      </div>
+    </div>
+
+    <!-- Item 4 -->
+    <div class="accordion-item">
+      <h3 class="accordion-header" id="faq-a-h4">
+        <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#faq-a-c4"
+                aria-expanded="false" aria-controls="faq-a-c4">
+          Wer muss teilnehmen?
+        </button>
+      </h3>
+      <div id="faq-a-c4" class="accordion-collapse collapse"
+           aria-labelledby="faq-a-h4" data-bs-parent="#faq-a">
+        <div class="accordion-body">
+          Nur Entscheider und Prozess-Owner (6 - 12 Personen). Keine Zuschauer. Der Sponsor nimmt an Beginn und Ende teil. 
+        </div>
+      </div>
+    </div>
+
+    <!-- Item 5 -->
+    <div class="accordion-item">
+      <h3 class="accordion-header" id="faq-a-h4">
+        <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#faq-a-c4"
+                aria-expanded="false" aria-controls="faq-a-c4">
+          Unsere Datenqualität ist nicht perfekt.
+        </button>
+      </h3>
+      <div id="faq-a-c4" class="accordion-collapse collapse"
+           aria-labelledby="faq-a-h4" data-bs-parent="#faq-a">
+        <div class="accordion-body">
+          Macht nichts. Wir arbeiten mit dem, was verfügbar ist, und markieren Lücken als Maßnahmen. Saubere Entscheidungen sind trotzdem möglich. 
+        </div>
+      </div>
+    </div>
+
+    <!-- Item 6 -->
+    <div class="accordion-item">
+      <h3 class="accordion-header" id="faq-a-h4">
+        <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#faq-a-c4"
+                aria-expanded="false" aria-controls="faq-a-c4">
+          Wir haben schon S&OP / viele Projekte.
+        </button>
+      </h3>
+      <div id="faq-a-c4" class="accordion-collapse collapse"
+           aria-labelledby="faq-a-h4" data-bs-parent="#faq-a">
+        <div class="accordion-body">
+          Gut. Wir priorisieren bestehende Initiativen neu, schließen Lücken (Cadence/Parameter) und stoppen Ballast.  
+        </div>
+      </div>
+    </div>
+
+  <!-- Item 7 -->
+    <div class="accordion-item">
+      <h3 class="accordion-header" id="faq-a-h4">
+        <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#faq-a-c4"
+                aria-expanded="false" aria-controls="faq-a-c4">
+          Wie schnell sehen wir Effekte?
+        </button>
+      </h3>
+      <div id="faq-a-c4" class="accordion-collapse collapse"
+           aria-labelledby="faq-a-h4" data-bs-parent="#faq-a">
+        <div class="accordion-body">
+          Typisch: Quick Win in 30 Tagen, spürbare KPI-Verbesserungen innerhalb von 60–90 Tagen (Pilotbereich).  
+        </div>
+      </div>
+    </div>
+
+  <!-- Item 8 -->
+    <div class="accordion-item">
+      <h3 class="accordion-header" id="faq-a-h4">
+        <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#faq-a-c4"
+                aria-expanded="false" aria-controls="faq-a-c4">
+          Branche/Systeme relevant?
+        </button>
+      </h3>
+      <div id="faq-a-c4" class="accordion-collapse collapse"
+           aria-labelledby="faq-a-h4" data-bs-parent="#faq-a">
+        <div class="accordion-body">
+          NWir sind tool-agnostisch (SAP/IBP, Kinaxis, o9 …) und arbeiten seit Jahren in regulierten und komplexen Umfeldern (Life Sciences, Maschinenbau, Elektronik u. a.).  
+        </div>
+      </div>
+    </div>
+
+  <!-- Item 9 -->
+    <div class="accordion-item">
+      <h3 class="accordion-header" id="faq-a-h4">
+        <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#faq-a-c4"
+                aria-expanded="false" aria-controls="faq-a-c4">
+          Vertraulichkeit / NDA?
+        </button>
+      </h3>
+      <div id="faq-a-c4" class="accordion-collapse collapse"
+           aria-labelledby="faq-a-h4" data-bs-parent="#faq-a">
+        <div class="accordion-body">
+          Selbstverständlich - NDA auf Wunsch vor dem Erstgespräch. 
+        </div>
+      </div>
+    </div>
+</section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer py-4">
+    <div class="container">
+   <hr class="my-3">
+      <div class="small d-flex flex-wrap gap-3">
+        <span>© <span id="year"></span> Avineo</span>
+        <a class="text-decoration-none" href="../legal/impressum.html">Impressum</a>
+        <a class="text-decoration-none" href="../legal/datenschutz.html">Datenschutz</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

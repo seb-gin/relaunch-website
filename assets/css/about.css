@@ -1,0 +1,96 @@
+/* === ABOUT (nur das Nötigste) =============================== */
+
+/* Rundes Portrait, responsive Größe */
+.about-portrait {
+  width: clamp(220px, 36vw, 460px); /* min 220px, preferred 36vw, max 460px */
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 9999px;
+  border: 3px solid rgba(0,0,0,.06);
+  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+  margin-inline: auto;
+}
+
+/* Logo-Stack rechts */
+.about-logos {
+  /* Hauptlogo-Größe zentral steuern
+     clamp(min, preferred, max) — vorher waren min/max vertauscht */
+  --main-size: clamp(240px, 36vw, 360px); /* passend für mobile → desktop */
+  /* Unterlogos = 1/4 der Hauptlogo-Größe (optisch kleiner) */
+  --chip-size: calc(var(--main-size) / 4);
+  /* Logografik im Chip ~ halbe Chip-Höhe */
+  --chip-img: calc(var(--chip-size) * 0.5);
+
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+}
+
+.about-logo-main {
+  width: var(--main-size);
+  height: auto;
+}
+
+.about-logos__subs {
+  display: flex;
+  gap: 48px; /* 100px war sehr groß — reduziert auf 48px für bessere Verteilung */
+  align-items: center;
+  justify-content: center;
+}
+
+/* Chips (Unterlogos) proportional */
+.about-logo-chip {
+  display: inline-grid;
+  place-items: center;
+  width: var(--chip-size);
+  height: var(--chip-size);
+  border-radius: 9999px;
+  border: 2px solid var(--switch-border, rgba(0,0,0,.06));
+  transition: filter .2s ease, transform .2s ease, background-color .2s ease;
+  background: transparent;
+}
+
+/* Bild im Chip */
+.about-logo-chip img {
+  height: var(--chip-img, 28px); /* nutzt deine Variable, fallback 28px */
+  width: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Hover / Focus Styles (sichtbar & zugänglich) */
+.about-logo-chip:focus-visible {
+  outline: 3px solid Highlight; /* sichtbare Fokushilfe für Tastaturnutzer */
+  outline-offset: 3px;
+  transform: translateY(-2px);
+}
+.about-logo-chip:hover,
+.about-logo-chip:focus {
+  transform: translateY(-2px);
+  filter: brightness(1.02);
+}
+
+/* Farben wie beim Switcher (nicht löschen) */
+.about-logo-chip--s2a { background: var(--switch-to-a-bg); }
+.about-logo-chip--s2a:hover,
+.about-logo-chip--s2a:focus-visible { background: var(--switch-to-a-hover); }
+
+.about-logo-chip--bsc { background: var(--switch-to-b-bg); }
+.about-logo-chip--bsc:hover,
+.about-logo-chip--bsc:focus-visible { background: var(--switch-to-b-hover); }
+
+/* etwas Luft unter Image-Blocks auf Mobile */
+@media (max-width: 991.98px) {
+  .about-portrait { margin-bottom: 30px; }
+  .about-logos { margin-bottom: 30px; }
+  .about-logos__subs { gap: 20px; } /* kleiner Abstand auf Mobilgeräten */
+}
+
+/* Optional: Verkleinerung bei sehr kleinen Bildschirmen */
+@media (max-width: 420px) {
+  .about-portrait { width: clamp(160px, 40vw, 220px); }
+  .about-logos { --main-size: clamp(160px, 40vw, 240px); }
+  .about-logo-chip { width: calc(var(--main-size) / 5); height: calc(var(--main-size) / 5); }
+  .about-logo-chip img { height: calc(var(--main-size) / 10); }
+}

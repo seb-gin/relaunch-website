@@ -1,0 +1,96 @@
+/* === B – Seite B (nur das Nötigste) ========================= */
+
+/* 1) B-Theme (wenn B eigene Primärfarbe haben soll) */
+:root{
+  --brand: #021740; /* dunkles Blau (falls du wirklich Grün willst: ersetze hier) */
+}
+
+/* 2) Hero B – Bild & Lesbarkeit
+   Hinweis: Pfad relativ zur CSS-Datei (assets/css) -> ../img/... */
+.hero--b{
+  --hero-b-img: url("../img/b/hero-b-1280.jpg"); /* Datei in assets/img/b */
+  min-height: clamp(320px, 60vh, 680px);
+  display: grid;
+  align-items: center;
+  color: #fff;
+  background-image:
+    linear-gradient(to bottom, rgba(0,0,0,.45), rgba(0,0,0,.35)),
+    var(--hero-b-img);
+  background-size: cover;
+  background-position: center;
+}
+@media (min-width: 992px){
+  .hero--b{ min-height: 70vh; }
+}
+
+/* 3) Feature-Zeilen (nur Kommentar-Hooks, keine leeren Rulesets) */
+/* .feature (Block), .feature__media (Bildspalte), .feature__body (Textspalte) */
+
+/* 4) Formular-Feinschliff (optional, Bootstrap reicht) */
+/* 
+.contact-form .form-control:focus{
+  border-color: var(--brand);
+  box-shadow: 0 0 0 .25rem color-mix(in srgb, var(--brand) 25%, transparent);
+}
+*/
+
+/* === FAQ ===================================== */
+/* Farben für FAQ (Seite B) */
+#faq-b{
+  --faq-closed-bg:   #f8fafc;   /* Kopfzeile zu (Button) */
+  --faq-closed-ink:  #0f172a;
+  --faq-open-bg:     #021740;   /* Kopfzeile offen */
+  --faq-open-ink:    #ffffff;
+  --faq-hover-bg:    #cedfff;   /* Hover wenn zu */
+  --faq-hover-ink:   #0f172a;
+
+  --faq-border:      #e5e7eb;   /* Rahmen der Items */
+  --faq-body-bg:     #ffffff;   /* Inhaltspanel */
+  --faq-body-ink:    #0f172a;
+  --faq-focus:       #f1502540; /* Focus-Ring */
+}
+
+/* Grundzustand (geschlossen) */
+#faq-b .accordion-item{
+  border: 1px solid var(--faq-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+#faq-b .accordion-item + .accordion-item{
+  margin-top: .75rem;
+}
+#faq-b .accordion-button{
+  background: var(--faq-closed-bg);
+  color: var(--faq-closed-ink);
+  padding: .9rem 1rem;
+  transition: background-color .2s ease, color .2s ease;
+}
+
+/* Hover (nur wenn zu) */
+#faq-b .accordion-button.collapsed:hover{
+  background: var(--faq-hover-bg);
+  color: var(--faq-hover-ink);
+}
+
+/* Offen */
+#faq-b .accordion-button:not(.collapsed){
+  background: var(--faq-open-bg);
+  color: var(--faq-open-ink);
+  box-shadow: none; /* Bootstrap-Schatten entfernen */
+}
+
+/* Panel */
+#faq-b .accordion-body{
+  background: var(--faq-body-bg);
+  color: var(--faq-body-ink);
+}
+
+/* Fokus / Tastaturbedienung */
+#faq-b .accordion-button:focus{
+  box-shadow: 0 0 0 .2rem var(--faq-focus);
+}
+
+/* Optional: Pfeil-Kontrast bei dunklem Open-BG verbessern */
+#faq-b .accordion-button:not(.collapsed)::after{
+  filter: invert(1) brightness(2); /* macht den Chevron hell */
+}
