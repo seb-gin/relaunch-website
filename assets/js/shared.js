@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // ROOT (absolute path)
   // -----------------------
   // Da deine Seite jetzt absolute Pfade nutzt, setzen wir ROOT hart auf '/'
-  var ROOT = '../';
+  var ROOT = '/';
   log('[root]', ROOT);
 
   // ==========================================
