@@ -4,64 +4,37 @@
 #columns { display:block; }
 #rotate-overlay { display:none; }
 
-/* ----------------------------------------
-   Robust Overlay-Fix:
-   - deckt 100 % sichtbaren Bereich + Safe Area ab
-   - funktioniert zuverlässig auf iPhones (viewport-fit=cover erforderlich)
-   - nutzt JS-var(--vh) Fallback aus shared.js
------------------------------------------ */
-@media (hover: none) and (pointer: coarse) and (orientation: portrait){
-  #columns { display:none !important; }
-  #rotate-overlay{
-    display:grid !important;
-    place-items:center;
-    position:fixed;
-    inset:0;
-    width:100%;
-    height:calc((var(--vh, 1vh) * 100) + env(safe-area-inset-top) + env(safe-area-inset-bottom));
-    padding:24px;
-    background:#fff; /* oder #000, je nach Design – wichtig: keine Transparenz */
-    z-index:9999;
-    text-align:center;
-    -webkit-backface-visibility:hidden;
-    overflow:hidden;
-    padding-top:env(safe-area-inset-top);
-    padding-bottom:env(safe-area-inset-bottom);
-  }
+/* === 100 % Vollabdeckung, egal welches iPhone === */
+#rotate-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: none;
+  place-items: center;
+  background: #fff;           /* solid, kein Durchscheinen */
+  z-index: 9999;
+  text-align: center;
+  overflow: hidden;
+  -webkit-backface-visibility: hidden;
+  padding: max(env(safe-area-inset-top), 24px)
+           max(env(safe-area-inset-right), 24px)
+           max(env(safe-area-inset-bottom), 24px)
+           max(env(safe-area-inset-left), 24px);
+  backface-visibility: hidden;         
 }
 
-/* Fallback für Emulatoren / sehr kleine Portrait-Geräte */
-@media (max-width: 995px) and (orientation: portrait){
-  #columns { display:none !important; }
-  #rotate-overlay{
-    display:grid !important;
-    place-items:center;
-    position:fixed;
-    inset:0;
-    width:100%;
-    height:calc((var(--vh, 1vh) * 100) + env(safe-area-inset-top) + env(safe-area-inset-bottom));
-    padding:24px;
-    background:#fff;
-    z-index:9999;
-    text-align:center;
-    -webkit-backface-visibility:hidden;
-    overflow:hidden;
-    padding-top:env(safe-area-inset-top);
-    padding-bottom:env(safe-area-inset-bottom);
-  }
-}
-
-/* GIF-Größe */
-#rotate-overlay .rotate-gif{
-  width: clamp(300px, 24vw, 160px);
+#rotate-overlay .rotate-gif {
+  width: clamp(200px, 40vmin, 280px);
   height: auto;
-  display:block;
+  display: block;
   margin: 0 auto 12px;
 }
-@media (prefers-reduced-motion: reduce){
-  #rotate-overlay .rotate-gif{ display:none; }
-}
 
+@media (prefers-reduced-motion: reduce) {
+  #rotate-overlay .rotate-gif { display: none; }
+}
 /* === HERO mit Hintergrundbild (Main) ===================== */
 /* ✏️ Bildpfad hier anpassen */
 .hero--with-image{

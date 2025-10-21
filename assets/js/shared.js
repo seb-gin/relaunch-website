@@ -279,27 +279,30 @@ document.addEventListener('DOMContentLoaded', function () {
   else init();
 })();
 
-/* ==========================================
-   Portrait-only Overlay Fix für rotate.gif
-==========================================*/
-function updateOverlay() {
-  const overlay = document.querySelector('.overlay');
+/* === Rotate-Overlay Height Fix (100 % auf allen iPhones) === */
+(function () {
+  const overlay = document.getElementById('rotate-overlay');
   if (!overlay) return;
 
-  const isPortrait = window.matchMedia("(orientation: portrait)").matches;
-  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+  function setOverlayHeight() {
+    const isPortrait = window.matchMedia('(orientation: portrait)').matches;
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
-  if (isMobile && isPortrait) {
-    overlay.style.display = 'block';
-    overlay.style.height = `${window.innerHeight}px`;
-  } else {
-    overlay.style.display = 'none';
+    if (isMobile && isPortrait) {
+      // exakte sichtbare Höhe inklusive Safe-Area
+      const h = window.innerHeight;
+      overlay.style.display = 'grid';
+      overlay.style.height = h + 'px';
+      overlay.style.width = window.innerWidth + 'px';
+    } else {
+      overlay.style.display = 'none';
+      overlay.style.height = '';
+      overlay.style.width = '';
+    }
   }
-}
 
-// Initial ausführen
-document.addEventListener('DOMContentLoaded', updateOverlay);
-
-// Bei Rotation oder Resize prüfen
-window.addEventListener('resize', updateOverlay);
-window.addEventListener('orientationchange', updateOverlay);
+  // Initial & bei Änderungen
+  window.addEventListener('orientationchange', () => setTimeout(setOverlayHeight, 200));
+  window.addEventListener('resize', () => setTimeout(setOverlayHeight, 100));
+  document.addEventListener('DOMContentLoaded', setOverlayHeight);
+})();
