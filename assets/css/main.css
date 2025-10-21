@@ -4,31 +4,53 @@
 #columns { display:block; }
 #rotate-overlay { display:none; }
 
+/* ----------------------------------------
+   Robust Overlay-Fix:
+   - deckt 100 % sichtbaren Bereich + Safe Area ab
+   - funktioniert zuverlässig auf iPhones (viewport-fit=cover erforderlich)
+   - nutzt JS-var(--vh) Fallback aus shared.js
+----------------------------------------- */
 @media (hover: none) and (pointer: coarse) and (orientation: portrait){
   #columns { display:none !important; }
   #rotate-overlay{
     display:grid !important;
     place-items:center;
-    position:fixed; inset:0;
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:calc((var(--vh, 1vh) * 100) + env(safe-area-inset-top) + env(safe-area-inset-bottom));
     padding:24px;
-    background:#fff;
+    background:#fff; /* oder #000, je nach Design – wichtig: keine Transparenz */
     z-index:9999;
     text-align:center;
+    -webkit-backface-visibility:hidden;
+    overflow:hidden;
+    padding-top:env(safe-area-inset-top);
+    padding-bottom:env(safe-area-inset-bottom);
   }
 }
-/* Fallback für Emulationen/very small portrait */
+
+/* Fallback für Emulatoren / sehr kleine Portrait-Geräte */
 @media (max-width: 995px) and (orientation: portrait){
   #columns { display:none !important; }
   #rotate-overlay{
     display:grid !important;
     place-items:center;
-    position:fixed; inset:0;
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:calc((var(--vh, 1vh) * 100) + env(safe-area-inset-top) + env(safe-area-inset-bottom));
     padding:24px;
     background:#fff;
     z-index:9999;
     text-align:center;
+    -webkit-backface-visibility:hidden;
+    overflow:hidden;
+    padding-top:env(safe-area-inset-top);
+    padding-bottom:env(safe-area-inset-bottom);
   }
 }
+
 /* GIF-Größe */
 #rotate-overlay .rotate-gif{
   width: clamp(300px, 24vw, 160px);
@@ -54,7 +76,7 @@
   min-height: 42vh;                    /* mobile */
   border-radius: var(--radius);
   padding: clamp(16px, 2.5vw, 28px);
-  color: #fff;                       /* Standard: heller Text auf Bild */
+  color: #fff;                         /* Standard: heller Text auf Bild */
 }
 
 /* leichte Abdunklung für bessere Lesbarkeit */
@@ -164,7 +186,6 @@
   --tile-logo-right:  clamp(16px, 3vw, 28px);
   --tile-logo-opacity:.99;
 }
-
 
 .tile::after{
   content:""; position:absolute; inset:0; pointer-events:none;

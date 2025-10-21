@@ -68,18 +68,6 @@
 }
 
 /* ================= BASICS ================= */
-
-/* Overlay Grundstyle */
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background: #ffffff; /* oder dein bestehendes Overlay-Farbdesign */
-  z-index: 9999;
-  display: none; /* wird per JS angezeigt */
-}
-
 html,body{
   font-family:var(--font);
   color:var(--ink);
