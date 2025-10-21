@@ -278,3 +278,20 @@ var ROOT = window.location.pathname.includes('/relaunch-website/')
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();
+function setOverlayHeight() {
+  // nur Mobile
+  if (/Mobi|Android/i.test(navigator.userAgent)) {
+    const overlay = document.querySelector('.overlay');
+    if (overlay) {
+      overlay.style.height = `${window.innerHeight}px`;
+      overlay.style.display = 'block';
+    }
+  }
+}
+
+// Höhe initial setzen
+setOverlayHeight();
+
+// Höhe bei Rotation oder Resize anpassen
+window.addEventListener('resize', setOverlayHeight);
+window.addEventListener('orientationchange', setOverlayHeight);
