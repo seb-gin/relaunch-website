@@ -12,12 +12,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   } catch(_e){}
 
-// ==========================================
-// ROOT dynamisch bestimmen – funktioniert lokal, auf GitHub Pages & Server
-// ==========================================
-var ROOT = window.location.pathname.includes('/relaunch-website/')
-  ? '/relaunch-website/'
-  : '/';
+  // ==========================================
+  // ROOT dynamisch bestimmen – funktioniert lokal, auf GitHub Pages & Server
+  // ==========================================
+  var ROOT = window.location.pathname.includes('/relaunch-website/')
+    ? '/relaunch-website/'
+    : '/';
 
   log('[root]', ROOT);
 
@@ -278,20 +278,28 @@ var ROOT = window.location.pathname.includes('/relaunch-website/')
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();
-function setOverlayHeight() {
-  // nur Mobile
-  if (/Mobi|Android/i.test(navigator.userAgent)) {
-    const overlay = document.querySelector('.overlay');
-    if (overlay) {
-      overlay.style.height = `${window.innerHeight}px`;
-      overlay.style.display = 'block';
-    }
+
+/* ==========================================
+   Portrait-only Overlay Fix für rotate.gif
+==========================================*/
+function updateOverlay() {
+  const overlay = document.querySelector('.overlay');
+  if (!overlay) return;
+
+  const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+  if (isMobile && isPortrait) {
+    overlay.style.display = 'block';
+    overlay.style.height = `${window.innerHeight}px`;
+  } else {
+    overlay.style.display = 'none';
   }
 }
 
-// Höhe initial setzen
-setOverlayHeight();
+// Initial ausführen
+document.addEventListener('DOMContentLoaded', updateOverlay);
 
-// Höhe bei Rotation oder Resize anpassen
-window.addEventListener('resize', setOverlayHeight);
-window.addEventListener('orientationchange', setOverlayHeight);
+// Bei Rotation oder Resize prüfen
+window.addEventListener('resize', updateOverlay);
+window.addEventListener('orientationchange', updateOverlay);
