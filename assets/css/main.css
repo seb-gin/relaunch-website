@@ -1,37 +1,39 @@
 /* === MAIN – Landing (schlank) ================================= */
 
-/* 1) Portrait-Overlay: Mobil-Portrait an, sonst aus */
+/* === Portrait-Overlay: Mobil-Portrait an, sonst aus === */
 #columns { display:block; }
 #rotate-overlay { display:none; }
 
-/* === Vollflächiger Weiß-Overlay, auch über Browserleisten === */
-#rotate-overlay {
-  position: fixed;
-  top: -50vh;          /* "übermalt" Raum oberhalb */
-  left: 0;
-  width: 100vw;
-  height: 200vh;       /* doppelt so hoch wie Viewport -> deckt alles */
-  display: none;
-  place-items: center;
-  background: #fff;
-  z-index: 9999;
-  text-align: center;
-  overflow: hidden;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  padding: 24px;
+/* Vollflächig + Safe-Area-Fix */
+@media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+  #columns { display:none !important; }
+  #rotate-overlay {
+    display:grid !important;
+    place-items:center;
+    position:fixed;
+    top:-50vh;                /* füllt negativen Raum oberhalb */
+    left:0;
+    width:100vw;
+    height:200vh;             /* doppelt so hoch – deckt unten ebenfalls ab */
+    background:#fff;
+    z-index:9999;
+    text-align:center;
+    overflow:hidden;
+    -webkit-backface-visibility:hidden;
+    backface-visibility:hidden;  /* Standard-Property ergänzt */
+    padding:24px;
+  }
 }
 
 /* GIF-Größe */
 #rotate-overlay .rotate-gif {
-  width: clamp(200px, 40vmin, 280px);
-  height: auto;
-  display: block;
-  margin: 0 auto 12px;
+  width:clamp(200px,40vmin,280px);
+  height:auto;
+  display:block;
+  margin:0 auto 12px;
 }
-
 @media (prefers-reduced-motion: reduce) {
-  #rotate-overlay .rotate-gif { display: none; }
+  #rotate-overlay .rotate-gif { display:none; }
 }
 /* === HERO mit Hintergrundbild (Main) ===================== */
 /* ✏️ Bildpfad hier anpassen */
