@@ -1,5 +1,4 @@
 // shared.js – Navbar-Logo-Link • Back-to-top • Header-Opacity • Switcher (s2a <-> bsc) • Cookie-Popup (Landscape mobile)
-// Dynamische Root-Erkennung für lokale Tests, GitHub Pages & Server-Hosting
 
 document.addEventListener('DOMContentLoaded', function () {
   var DEBUG = (typeof window.DEBUG === 'boolean') ? window.DEBUG : false;
@@ -12,18 +11,13 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   } catch(_e){}
 
-  // ==========================================
-  // ROOT dynamisch bestimmen – funktioniert lokal, auf GitHub Pages & Server
-  // ==========================================
+  // ROOT dynamisch bestimmen
   var ROOT = window.location.pathname.includes('/relaunch-website/')
     ? '/relaunch-website/'
     : '/';
-
   log('[root]', ROOT);
 
-  // ==========================================
   // Navbar-Logo -> immer zur Startseite verlinken
-  // ==========================================
   (function(){
     try{
       var target = ROOT + 'index.html';
@@ -39,13 +33,10 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         }, { capture:true });
       });
-      log('[brand->home]', target);
     }catch(e){ log('[brand->home][err]', e); }
   })();
 
-  // ==================================
   // Back-to-top Button (nur Desktop)
-  // ==================================
   (function(){
     try {
       var mqDesktop = window.matchMedia('(hover: hover) and (pointer: fine)');
@@ -64,24 +55,17 @@ document.addEventListener('DOMContentLoaded', function () {
         };
         toggle();
         window.addEventListener('scroll', toggle, { passive: true });
-
         btn.addEventListener('click', function () {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         });
-
         mqDesktop.addEventListener && mqDesktop.addEventListener('change', function (ev) {
           if (!ev.matches) btn.remove();
         });
-        log('[to-top] aktiviert');
-      } else {
-        log('[to-top] ausgelassen (mobil oder existiert schon)');
       }
     } catch (e) { log('[to-top][err]', e); }
   })();
 
-  // ==========================================
   // Header-Opacity beim Scrollen togglen
-  // ==========================================
   (function(){
     try {
       var hdr = document.querySelector('body > header');
@@ -92,28 +76,19 @@ document.addEventListener('DOMContentLoaded', function () {
       };
       toggleHeader();
       window.addEventListener('scroll', toggleHeader, { passive: true });
-      log('[header opacity] aktiv');
     } catch (e) { log('[header opacity][err]', e); }
   })();
 
-  // ====================================================
   // Switcher: verbindet /s2a/ <-> /bsc/
-  // ====================================================
   (function(){
     try {
       var sectionAttr = (document.body.getAttribute('data-section') || '').trim().toLowerCase();
       var path = (location.pathname || '').toLowerCase();
-
       var isS2A_root = path.endsWith('/s2a/') || path.endsWith('/s2a/index.html');
       var isBSC_root = path.endsWith('/bsc/') || path.endsWith('/bsc/index.html');
-
       var isS2A = sectionAttr === 'a' || sectionAttr === 's2a' || isS2A_root;
       var isBSC = sectionAttr === 'b' || sectionAttr === 'bsc' || isBSC_root;
-
-      if (!(isS2A || isBSC)) { 
-        console.log && console.log('[switcher] übersprungen (nicht root / nicht data-section a|b)');
-        return; 
-      }
+      if (!(isS2A || isBSC)) return;
 
       var targetHref = ROOT + (isS2A ? 'bsc/index.html' : 's2a/index.html');
       var logoSrc    = ROOT + 'assets/img/main/' + (isS2A ? 'tile-b-logo.svg' : 'tile-a-logo.svg');
@@ -145,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var collapse  = navbar && navbar.querySelector('.navbar-collapse');
       var navList   = collapse && collapse.querySelector('.navbar-nav');
 
-      if (!container) { console.warn('[switcher] kein Navbar-Container'); return; }
+      if (!container) return;
 
       var mqDesktop = window.matchMedia('(min-width: 992px)');
       function place() {
@@ -169,15 +144,12 @@ document.addEventListener('DOMContentLoaded', function () {
       place();
       mqDesktop.addEventListener ? mqDesktop.addEventListener('change', place)
                                  : window.addEventListener('resize', place);
-
       try { new MutationObserver(place).observe(container, { childList:true, subtree:true }); } catch(_e){}
-
-      console.log && console.log('[switcher] aktiv (', isS2A ? 's2a' : 'bsc', '→', isS2A ? 'bsc' : 's2a', ')');
-    } catch (e) { console.error && console.error('[switcher][err]', e); }
+    } catch (e) { log('[switcher][err]', e); }
   })();
 }); // Ende DOMContentLoaded
 
-// ================= COOKIE CORNER + overlay click-catcher =================
+// ================= COOKIE CORNER + Overlay Click-Catcher =================
 (function(){
   var KEY = 'avineo_cookie_consent';
   var overlay = document.getElementById('cookie-overlay');
@@ -240,58 +212,20 @@ document.addEventListener('DOMContentLoaded', function () {
   function attachHandlers(){
     if(!box || attachHandlers._done) return;
     attachHandlers._done = true;
-
     acceptBtn = box.querySelector('.cookie-accept');
     declineBtn = box.querySelector('.cookie-decline');
-
     acceptBtn && acceptBtn.addEventListener('click', function(e){
       e.stopPropagation();
       safeSet('accepted');
       loadAllowedScripts(['analytics','marketing','performance']);
       hideCookie();
     });
-
     declineBtn && declineBtn.addEventListener('click', function(e){
       e.stopPropagation();
       safeSet('rejected');
       hideCookie();
     });
-
     overlay && overlay.addEventListener('click', function(e){
       e.preventDefault();
       e.stopPropagation();
-      visualHint();
-    });
-  }
-
-  function init(){
-    var current = safeGet();
-    if(current === 'accepted'){
-      loadAllowedScripts(['analytics','marketing','performance']);
-      hideCookie();
-      return;
-    }
-    if(current === 'rejected'){ hideCookie(); return; }
-    showCookie();
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
-})();
-
-/* === Rotate-Overlay Height Fix (100 % auf allen iPhones) === */
-(function(){
-  const overlay = document.getElementById('rotate-overlay');
-  if (!overlay) return;
-
-  function toggleOverlay() {
-    const isPortrait = window.matchMedia('(orientation: portrait)').matches;
-    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-
-    overlay.style.display = (isMobile && isPortrait) ? 'grid' : 'none';
-  }
-
-  document.addEventListener('DOMContentLoaded', toggleOverlay);
-  window.addEventListener('resize', toggleOverlay);
-  window.addEventListener('orientationchange', () => setTimeout(toggleOverlay,150));
-})();
+})}});
