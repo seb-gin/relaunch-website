@@ -12,7 +12,9 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   } catch(_e){}
 
+// ==========================================
 // ROOT dynamisch bestimmen – funktioniert lokal, auf GitHub Pages & Server
+// ==========================================
 var ROOT = window.location.pathname.includes('/relaunch-website/')
   ? '/relaunch-website/'
   : '/';
