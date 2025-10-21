@@ -12,20 +12,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   } catch(_e){}
 
-  // -----------------------
-  // DYNAMISCHE ROOT-ERKENNUNG
-  // -----------------------
-  var ROOT = (function() {
-    try {
-      var path = window.location.pathname; // z. B. /projektname/s2a/index.html
-      var parts = path.split('/').filter(Boolean);
-      // Wenn dein Projekt in einem Unterordner liegt (z. B. GitHub Pages)
-      if (parts.length > 1) {
-        return '/' + parts[0] + '/';
-      }
-    } catch(e){}
-    return '/';
-  })();
+// ROOT dynamisch bestimmen – funktioniert lokal, auf GitHub Pages & Server
+var ROOT = window.location.pathname.includes('/relaunch-website/')
+  ? '/relaunch-website/'
+  : '/';
 
   log('[root]', ROOT);
 
