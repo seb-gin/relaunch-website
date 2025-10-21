@@ -280,29 +280,18 @@ document.addEventListener('DOMContentLoaded', function () {
 })();
 
 /* === Rotate-Overlay Height Fix (100 % auf allen iPhones) === */
-(function () {
+(function(){
   const overlay = document.getElementById('rotate-overlay');
   if (!overlay) return;
 
-  function setOverlayHeight() {
+  function toggleOverlay() {
     const isPortrait = window.matchMedia('(orientation: portrait)').matches;
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
-    if (isMobile && isPortrait) {
-      // exakte sichtbare Höhe inklusive Safe-Area
-      const h = window.innerHeight;
-      overlay.style.display = 'grid';
-      overlay.style.height = h + 'px';
-      overlay.style.width = window.innerWidth + 'px';
-    } else {
-      overlay.style.display = 'none';
-      overlay.style.height = '';
-      overlay.style.width = '';
-    }
+    overlay.style.display = (isMobile && isPortrait) ? 'grid' : 'none';
   }
 
-  // Initial & bei Änderungen
-  window.addEventListener('orientationchange', () => setTimeout(setOverlayHeight, 200));
-  window.addEventListener('resize', () => setTimeout(setOverlayHeight, 100));
-  document.addEventListener('DOMContentLoaded', setOverlayHeight);
+  document.addEventListener('DOMContentLoaded', toggleOverlay);
+  window.addEventListener('resize', toggleOverlay);
+  window.addEventListener('orientationchange', () => setTimeout(toggleOverlay,150));
 })();
