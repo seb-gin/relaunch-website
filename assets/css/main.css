@@ -1,40 +1,40 @@
-/* === MAIN – Landing (schlank) ================================= */
-
 /* === Portrait-Overlay: Mobil-Portrait an, sonst aus === */
 #columns { display:block; }
 #rotate-overlay { display:none; }
 
-/* Vollflächiger Overlay, deckt alles (auch unter Browserleisten) ab */
+/* Korrigierter Vollbild-Overlay für iPhone (mit Safe-Area) */
 @media screen and (max-width: 995px) and (orientation: portrait) {
   #columns { display:none !important; }
   #rotate-overlay {
     display:grid !important;
     place-items:center;
     position:fixed;
-    top:-50vh;                /* füllt negativen Raum oberhalb */
-    left:0;
-    width:100vw;
-    height:200vh;             /* doppelt so hoch – deckt unten ebenfalls ab */
+    inset:0;                          /* ersetzt top/left/width/height */
     background:#fff;
     z-index:9999;
     text-align:center;
     overflow:hidden;
+
+    /* Safe-Area-Ausgleich */
+    padding-top: calc(env(safe-area-inset-top) + 24px);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 24px);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+
     -webkit-backface-visibility:hidden;
     backface-visibility:hidden;
-    padding:24px;
   }
 }
 
-/* GIF-Größe */
+/* GIF mittig skalieren */
 #rotate-overlay .rotate-gif {
-  width:clamp(200px,40vmin,280px);
-  height:auto;
-  display:block;
-  margin:0 auto 12px;
+  width: clamp(180px, 40vmin, 280px);
+  height: auto;
+  margin: 0 auto 12px;
+  display: block;
 }
-
-@media (prefers-reduced-motion: reduce) {
-  #rotate-overlay .rotate-gif { display:none; }
+@media (prefers-reduced-motion: reduce){
+  #rotate-overlay .rotate-gif{ display:none; }
 }
 
 /* === HERO mit Hintergrundbild (Main) ===================== */
