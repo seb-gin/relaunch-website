@@ -4,27 +4,25 @@
 #columns { display:block; }
 #rotate-overlay { display:none; }
 
-/* === 100 % Vollabdeckung, egal welches iPhone === */
+/* === Vollflächiger Weiß-Overlay, auch über Browserleisten === */
 #rotate-overlay {
   position: fixed;
-  top: 0;
+  top: -50vh;          /* "übermalt" Raum oberhalb */
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100vw;
+  height: 200vh;       /* doppelt so hoch wie Viewport -> deckt alles */
   display: none;
   place-items: center;
-  background: #fff;           /* solid, kein Durchscheinen */
+  background: #fff;
   z-index: 9999;
   text-align: center;
   overflow: hidden;
   -webkit-backface-visibility: hidden;
-  padding: max(env(safe-area-inset-top), 24px)
-           max(env(safe-area-inset-right), 24px)
-           max(env(safe-area-inset-bottom), 24px)
-           max(env(safe-area-inset-left), 24px);
-  backface-visibility: hidden;         
+  backface-visibility: hidden;
+  padding: 24px;
 }
 
+/* GIF-Größe */
 #rotate-overlay .rotate-gif {
   width: clamp(200px, 40vmin, 280px);
   height: auto;
