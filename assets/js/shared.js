@@ -228,4 +228,36 @@ document.addEventListener('DOMContentLoaded', function () {
     overlay && overlay.addEventListener('click', function(e){
       e.preventDefault();
       e.stopPropagation();
-})}});
+      visualHint();
+    });
+  }
+
+  function init(){
+    var current = safeGet();
+    if(current === 'accepted'){
+      loadAllowedScripts(['analytics','marketing','performance']);
+      hideCookie();
+      return;
+    }
+    if(current === 'rejected'){ hideCookie(); return; }
+    showCookie();
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+
+// === Rotate-Overlay Logic (vollständige Bildschirmabdeckung, mobile Portrait) ===
+(function(){
+  const overlay = document.getElementById('rotate-overlay');
+  if (!overlay) return;
+
+  function toggleOverlay() {
+    const isPortrait = window.matchMedia('(orientation: portrait)').matches;
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    overlay.style.display = (isMobile && isPortrait) ? 'grid' : 'none';
+  }
+
+  document.addEventListener('DOMContentLoaded', toggleOverlay);
+  window.addEventListener('resize', toggleOverlay);
+  window.addEventListener('orientationchange', () => setTimeout(toggleOverlay,150));
+})();
