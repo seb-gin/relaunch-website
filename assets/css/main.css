@@ -246,3 +246,44 @@
   background-position: center;
 }
 */
+
+
+
+
+/* === PORTRAIT-HINWEIS – sichtbare Ebene über allem === */
+@media screen and (max-width: 995px) and (orientation: portrait) {
+  #rotate-hint {
+    display: grid !important;
+    place-items: center;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 2147483647 !important;
+    width: 100% !important;
+    height: 100% !important;
+    text-align: center;
+    overflow: hidden;
+    background: rgba(255,255,255,0.85) !important; /* leicht transparentes Weiß */
+    backdrop-filter: blur(10px) !important; /* Blur-Effekt für Hintergrund */
+    -webkit-backdrop-filter: blur(10px) !important;
+    padding-top: calc(env(safe-area-inset-top) + 24px) !important;
+    padding-bottom: calc(env(safe-area-inset-bottom) + 24px) !important;
+    -webkit-backface-visibility: hidden !important;
+    backface-visibility: hidden !important;
+  }
+
+  #rotate-hint img {
+    width: 160px;
+    height: auto;
+    margin-bottom: 12px;
+  }
+
+  #rotate-hint p {
+    color: #000;
+  }
+}
+
+@media screen and (orientation: landscape) {
+  #rotate-hint {
+    display: none !important;
+  }
+}
