@@ -272,7 +272,7 @@
   }
 
   #rotate-hint img {
-    width: clamp(220px, 50vmin, 340px);
+    width: clamp(300px, 50vmin, 600px);
     height: auto;
     margin-bottom: 20px;
   }
