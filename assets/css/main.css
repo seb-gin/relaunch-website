@@ -272,12 +272,13 @@
   }
 
   #rotate-hint img {
-    width: 160px;
+    width: clamp(200px, 50vmin, 320px);
     height: auto;
     margin-bottom: 12px;
   }
 
   #rotate-hint p {
+    margin-top: 12px;
     color: #000;
   }
 }
