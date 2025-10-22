@@ -323,3 +323,26 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('resize', showIfPortrait);
   window.addEventListener('orientationchange', function(){ setTimeout(showIfPortrait, 150); });
 })();
+
+(function() {
+  const hint = document.getElementById('rotate-hint');
+  if (!hint) return;
+
+  function toggleHint() {
+    const isPortrait = window.matchMedia('(orientation: portrait)').matches;
+    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isMobile && isPortrait) {
+      hint.style.display = 'grid';
+      hint.style.visibility = 'visible';
+      document.body.style.overflow = 'hidden';
+    } else {
+      hint.style.display = 'none';
+      hint.style.visibility = 'hidden';
+      document.body.style.overflow = '';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', toggleHint);
+  window.addEventListener('resize', toggleHint);
+  window.addEventListener('orientationchange', () => setTimeout(toggleHint, 200));
+})();
