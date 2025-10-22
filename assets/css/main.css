@@ -272,14 +272,17 @@
   }
 
   #rotate-hint img {
-    width: 400px;
+    width: clamp(220px, 50vmin, 340px);
     height: auto;
-    margin-bottom: 12px;
+    margin-bottom: 20px;
   }
 
   #rotate-hint p {
-    margin-top: 12px;
+    text-align: left;
+    max-width: 90%;
+    margin:4px auto 0;
     color: #000;
+    line-height: 1.4;
   }
 }
 
