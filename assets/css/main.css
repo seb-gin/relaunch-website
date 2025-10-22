@@ -1,115 +1,85 @@
 /* === MAIN – Landing (schlank) ================================= */
 
-/* === Portrait-Overlay: Mobil-Portrait an, sonst aus (Blur-Version) === */
+/* === Portrait-Overlay: Mobil-Portrait an, sonst aus === */
 #columns { display:block; }
-#rotate-blur { display:none; }
+#rotate-overlay { display:none; }
 
-/* Design-Variablen */
-:root {
-  --rotate-blur-color: #000000b3;               /* Färbung / Tönung */
-  --rotate-blur-strength: 18px;                   /* Blur-Stärke */
-  --rotate-saturate: 100%;                        /* Farbsättigung */
-}
-
-/* === Mobile Portrait: Overlay aktiv === */
-@media screen and (max-width: 995px) and (orientation: portrait) {
+/* Vollflächig + Safe-Area-Fix */
+@media (hover: none) and (pointer: coarse) and (orientation: portrait) {
   #columns { display:none !important; }
-
-  #rotate-blur {
-    display: grid !important;
-    place-items: center;
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 99990;
-    pointer-events: auto;
-    text-align: center;
-    overflow: hidden;
-
-    /* Blur + Fallback */
-    -webkit-backdrop-filter: blur(var(--rotate-blur-strength))
-                             saturate(var(--rotate-saturate));
-    backdrop-filter: blur(var(--rotate-blur-strength))
-                     saturate(var(--rotate-saturate));
-    background-color: var(--rotate-blur-color);
-
-    /* Safe Area Padding */
-    padding-top: calc(env(safe-area-inset-top) + 20px);
-    padding-bottom: calc(env(safe-area-inset-bottom) + 20px);
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
-
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-  }
-
-  #rotate-blur.is-active {
-    opacity: 1;
-  }
-
-  /* Innerer Container mit GIF + Text */
-  #rotate-blur .rotate-inner {
-    position: relative;
-    z-index: 99991;
-    display: grid;
-    place-items: center;
-    gap: 12px;
-    max-width: 92%;
-    box-sizing: border-box;
-    transform: translateZ(0);
-  }
-
-  #rotate-blur .rotate-gif {
-    width: clamp(140px, 38vmin, 240px);
-    height: auto;
-    display: block;
-    margin: 0 auto;
-  }
-
-  #rotate-blur .rotate-text {
-    font-size: clamp(15px, 2.6vw, 18px);
-    color: #111;
-    line-height: 1.3;
-    text-align: center;
+  #rotate-overlay {
+    display:grid !important;
+    place-items:center;
+    position:fixed;
+    top:-50vh;                /* füllt negativen Raum oberhalb */
+    left:0;
+    width:100vw;
+    height:200vh;             /* doppelt so hoch – deckt unten ebenfalls ab */
+    background:#fff;
+    z-index:9999;
+    text-align:center;
+    overflow:hidden;
+    -webkit-backface-visibility:hidden;
+    backface-visibility:hidden;  /* Standard-Property ergänzt */
+    padding:24px;
   }
 }
 
+/* GIF-Größe */
+#rotate-overlay .rotate-gif {
+  width:clamp(200px,40vmin,280px);
+  height:auto;
+  display:block;
+  margin:0 auto 12px;
+}
 @media (prefers-reduced-motion: reduce) {
-  #rotate-blur .rotate-gif { display: none; }
+  #rotate-overlay .rotate-gif { display:none; }
 }
-
 /* === HERO mit Hintergrundbild (Main) ===================== */
+/* ✏️ Bildpfad hier anpassen */
 .hero--with-image{
   position: relative;
-  isolation: isolate;
+  isolation: isolate;                  /* pseudo-Overlay bleibt hinter dem Text */
   background-image: url("../img/main/hero-main.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  min-height: 42vh;
+
+  /* Höhe/Abstände (mobile-first) */
+  min-height: 42vh;                    /* mobile */
   border-radius: var(--radius);
   padding: clamp(16px, 2.5vw, 28px);
-  color: #fff;
+  color: #fff;                         /* Standard: heller Text auf Bild */
 }
+
+/* leichte Abdunklung für bessere Lesbarkeit */
 .hero--with-image::before{
   content: "";
   position: absolute;
   inset: 0;
-  z-index: -1;
-  background: linear-gradient(to bottom, rgba(0,0,0,.28), rgba(0,0,0,.50));
+  z-index: -1;                         /* hinter Content */
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,.28),
+    rgba(0,0,0,.50)
+  );
   border-radius: inherit;
 }
-.hero--with-image .hero__box{ background: transparent !important; }
 
+/* Überschriften / Text innerhalb des Heros etwas „luftiger“ */
+.hero--with-image .hero__box{
+  background: transparent !important;
+}
+
+/* Desktop: hero größer wirken lassen */
 @media (min-width: 992px){
   .hero--with-image{
     min-height: 56vh;
     padding: clamp(16px, 2.5vw, 28px);
   }
 }
+
+/* Wenn du dunklen Text willst (z. B. bei sehr hellen Bildern) → Klasse zusätzlich setzen: .hero--light */
 .hero--light{ color: var(--ink); }
 .hero--light::before{
   background: linear-gradient(to bottom, rgba(255,255,255,.55), rgba(255,255,255,.15));
@@ -118,41 +88,49 @@
 /* 2) Force 2 columns in very narrow landscape */
 @media (orientation: landscape) and (max-width: 767.98px){
   .force-2cols-landscape{ display:flex; flex-wrap:wrap; }
-  .force-2cols-landscape > [class^="col"]{ flex:0 0 50%; max-width:50%; }
+  .force-2cols-landscape > [class^="col"]{
+    flex:0 0 50%; max-width:50%;
+  }
 }
 
-/* === Tiles (A/B) – simple Farben + Hover ================= */
+/* 3) Tiles (A/B) – simple, getrennte Farben + Hover */
 :root{
   --tile-radius: var(--radius);
   --tile-pad: clamp(16px, 2.5vw, 28px);
-  --tileA-bg: #f15025;
-  --tileA-text:#ffffff;
-  --tileA-border:#f15025;
-  --tileA-hover:#ff6a3d;
-  --tileA-shadow:0 8px 24px rgba(0,0,0,.12);
-  --tileB-bg:#0b2c5f;
-  --tileB-text:#ffffff;
-  --tileB-border:#021740;
-  --tileB-hover:#213a7a;
-  --tileB-shadow:0 8px 24px rgba(0,0,0,.12);
+
+  /* A */
+  --tileA-bg:     #f15025;
+  --tileA-text:   #ffffff;
+  --tileA-border: #f15025;
+  --tileA-hover:  #ff6a3d;
+  --tileA-shadow: 0 8px 24px rgba(0,0,0,.12);
+
+  /* B */
+  --tileB-bg:     #0b2c5f;
+  --tileB-text:   #ffffff;
+  --tileB-border: #021740;
+  --tileB-hover:  #213a7a;
+  --tileB-shadow: 0 8px 24px rgba(0,0,0,.12);
 }
 
+/* Basis-Look (Form/Animation) */
 .tile{
   display:block;
   text-decoration:none;
   padding: var(--tile-pad);
   min-height: clamp(200px, 32vh, 360px);
   border-radius: var(--tile-radius);
-  position: relative;
+  position: relative;  /* wichtig für ::after */
   z-index:0;
   overflow:hidden;
   transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
 .tile h2, .tile p{ position:relative; z-index:1; }
 
+/* A */
 .tile--a{
   background: var(--tileA-bg);
-  color: var(--tileA-text);
+  color:      var(--tileA-text);
   border: 1px solid var(--tileA-border);
 }
 .tile--a:hover, .tile--a:focus-visible{
@@ -162,9 +140,10 @@
   outline:none;
 }
 
+/* B */
 .tile--b{
   background: var(--tileB-bg);
-  color: var(--tileB-text);
+  color:      var(--tileB-text);
   border: 1px solid var(--tileB-border);
 }
 .tile--b:hover, .tile--b:focus-visible{
@@ -174,12 +153,13 @@
   outline:none;
 }
 
-/* Logos rechts im Tile */
+/* 4) Tile-Logos rechts, „aus dem Nebel“ (robust, ohne mask) */
 :root{
-  --tile-logo-size: clamp(160px, 40%, 300px);
-  --tile-logo-right: clamp(16px, 3vw, 28px);
+  --tile-logo-size:   clamp(160px, 40%, 300px);
+  --tile-logo-right:  clamp(16px, 3vw, 28px);
   --tile-logo-opacity:.99;
 }
+
 .tile::after{
   content:""; position:absolute; inset:0; pointer-events:none;
   background-repeat:no-repeat;
@@ -189,8 +169,9 @@
   transform: translateX(12px);
   filter: blur(10px);
   animation: fog-in 900ms ease-out 120ms both;
-  mix-blend-mode: soft-light;
+  mix-blend-mode: soft-light; /* alternativ: overlay / normal */
 }
+/* pro Säule eigenes Logo (SVG/PNG egal) */
 .tile--a::after{ background-image: url("../img/main/tile-a-logo.svg"); }
 .tile--b::after{ background-image: url("../img/main/tile-b-logo.svg"); }
 
@@ -199,11 +180,30 @@
   transform: translateX(6px);
   filter: blur(6px);
 }
+
 @keyframes fog-in{
-  0% { opacity:0; transform:translateX(18px); filter:blur(14px); }
-  60%{ opacity:calc(var(--tile-logo-opacity)*.8); filter:blur(7px); }
-  100%{ opacity:var(--tile-logo-opacity); transform:translateX(0); filter:blur(0); }
+  0%   { opacity:0; transform:translateX(18px); filter:blur(14px); }
+  60%  { opacity:calc(var(--tile-logo-opacity) * .8); filter:blur(7px); }
+  100% { opacity:var(--tile-logo-opacity); transform:translateX(0); filter:blur(0); }
 }
 @media (prefers-reduced-motion: reduce){
   .tile::after{ animation:none; transform:none; filter:none; }
 }
+
+/* 5) Hero (bündig) – Bild optional später */
+.hero--main .hero__box{
+  color:#fff;
+  padding:60px;
+  min-height: clamp(280px, 50vh, 100px);
+  border-radius: var(--radius);
+  background: #1f2937; /* ✏️ Platzhalter; später gern mit Bild ersetzen */
+}
+/* Beispiel (später aktivieren, wenn Bild vorhanden):
+.hero--main .hero__box{
+  background-image:
+    linear-gradient(to bottom, rgba(0,0,0,.45), rgba(0,0,0,.35)),
+    url("../assets/img/main/hero-main-1280.jpg");
+  background-size: cover;
+  background-position: center;
+}
+*/
