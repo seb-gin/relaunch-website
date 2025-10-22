@@ -279,7 +279,7 @@ document.addEventListener('DOMContentLoaded', function () {
   else init();
 })();
 
-/* === Rotate-Overlay Height Fix (100 % auf allen iPhones) === */
+/* === Rotate-Overlay Display Control (Portrait only) === */
 (function(){
   const overlay = document.getElementById('rotate-overlay');
   if (!overlay) return;
@@ -288,6 +288,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const isPortrait = window.matchMedia('(orientation: portrait)').matches;
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
+    // Sichtbarkeit nur bei Mobile + Portrait
     overlay.style.display = (isMobile && isPortrait) ? 'grid' : 'none';
   }
 
