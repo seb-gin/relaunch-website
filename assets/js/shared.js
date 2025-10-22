@@ -25,35 +25,86 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('scroll', toggleHeader, { passive: true });
   }
 
-  // ==========================================
-  // Switcher S2A <-> BSC (verkürzt)
-  (function(){
-    const sectionAttr = (document.body.getAttribute('data-section') || '').toLowerCase();
-    const path = location.pathname.toLowerCase();
-    const isS2A_root = path.endsWith('/s2a/') || path.endsWith('/s2a/index.html');
-    const isBSC_root = path.endsWith('/bsc/') || path.endsWith('/bsc/index.html');
-    const isS2A = sectionAttr === 'a' || sectionAttr === 's2a' || isS2A_root;
-    const isBSC = sectionAttr === 'b' || sectionAttr === 'bsc' || isBSC_root;
-    if (!(isS2A || isBSC)) return;
+ // ====================================================
+// Switcher: verbindet /s2a/ <-> /bsc/
+// ====================================================
+(function(){
+  try {
+    var sectionAttr = (document.body.getAttribute('data-section') || '').trim().toLowerCase();
+    var path = (location.pathname || '').toLowerCase();
 
-    const targetHref = ROOT + (isS2A ? 'bsc/index.html' : 's2a/index.html');
-    const logoSrc    = ROOT + 'assets/img/main/' + (isS2A ? 'tile-b-logo.svg' : 'tile-a-logo.svg');
-    const label      = isS2A ? 'Zu Bereich BSC' : 'Zu Bereich S2A';
+    var isS2A_root = path.endsWith('/s2a/') || path.endsWith('/s2a/index.html');
+    var isBSC_root = path.endsWith('/bsc/') || path.endsWith('/bsc/index.html');
 
-    let sw = document.querySelector('.brand-switcher');
-    if (!sw){
+    var isS2A = sectionAttr === 'a' || sectionAttr === 's2a' || isS2A_root;
+    var isBSC = sectionAttr === 'b' || sectionAttr === 'bsc' || isBSC_root;
+
+    if (!(isS2A || isBSC)) { 
+      console.log && console.log('[switcher] übersprungen (nicht root / nicht data-section a|b)');
+      return; 
+    }
+
+    var targetHref = ROOT + (isS2A ? 'bsc/index.html' : 's2a/index.html');
+    var logoSrc    = ROOT + 'assets/img/main/' + (isS2A ? 'tile-b-logo.svg' : 'tile-a-logo.svg');
+    var label      = isS2A ? 'Zu Bereich BSC' : 'Zu Bereich S2A';
+
+    var sw = document.querySelector('.brand-switcher');
+    if (!sw) {
       sw = document.createElement('a');
       sw.className = 'brand-switcher ' + (isS2A ? 'switch--to-b' : 'switch--to-a');
       sw.href = targetHref;
       sw.title = label;
-      const img = document.createElement('img');
+      sw.setAttribute('aria-label', label);
+      var img = document.createElement('img');
+      img.className = 'brand-switcher__logo';
       img.src = logoSrc;
       img.alt = label;
       sw.appendChild(img);
-      document.querySelector('.navbar .container, .navbar .container-fluid')?.appendChild(sw);
+    } else {
+      sw.href = targetHref;
+      var imgInside = sw.querySelector('img');
+      if (imgInside) { imgInside.src = logoSrc; imgInside.alt = label; }
+      sw.classList.remove('switch--to-a','switch--to-b');
+      sw.classList.add(isS2A ? 'switch--to-b' : 'switch--to-a');
     }
-  })();
-});
+
+    var navbar    = document.querySelector('.navbar');
+    var container = navbar && (navbar.querySelector('.container') || navbar.querySelector('.container-fluid'));
+    var toggler   = navbar && navbar.querySelector('.navbar-toggler');
+    var collapse  = navbar && navbar.querySelector('.navbar-collapse');
+    var navList   = collapse && collapse.querySelector('.navbar-nav');
+
+    if (!container) { console.warn('[switcher] kein Navbar-Container'); return; }
+
+    var mqDesktop = window.matchMedia('(min-width: 992px)');
+    function place() {
+      if (mqDesktop.matches) {
+        sw.classList.remove('brand-switcher--next-to-toggler');
+        var li = sw.closest('li');
+        if (!li) { li = document.createElement('li'); li.className = 'nav-item'; li.appendChild(sw); }
+        if (navList && li.parentNode !== navList) navList.appendChild(li);
+        else if (!navList && li.parentNode !== container) container.appendChild(li);
+      } else {
+        var liNow = sw.closest('li');
+        if (liNow) liNow.remove();
+        if (sw.parentNode !== container) container.appendChild(sw);
+        if (toggler) {
+          if (toggler.nextSibling) container.insertBefore(sw, toggler.nextSibling);
+          else container.appendChild(sw);
+        }
+        sw.classList.add('brand-switcher--next-to-toggler');
+      }
+    }
+    place();
+    mqDesktop.addEventListener ? mqDesktop.addEventListener('change', place)
+                               : window.addEventListener('resize', place);
+
+    try { new MutationObserver(place).observe(container, { childList:true, subtree:true }); } catch(_e){}
+
+    console.log && console.log('[switcher] aktiv (', isS2A ? 's2a' : 'bsc', '→', isS2A ? 'bsc' : 's2a', ')');
+  } catch (e) { console.error && console.error('[switcher][err]', e); }
+})();
+
 
 /* === Rotate-Blur Overlay (mobile portrait) === */
 (function(){
@@ -113,4 +164,4 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('resize', ()=>setTimeout(toggle,80));
   window.addEventListener('orientationchange', ()=>setTimeout(toggle,150));
   window.addEventListener('focus', ()=>setTimeout(toggle,120));
-})();
+})()});
