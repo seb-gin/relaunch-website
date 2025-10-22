@@ -5,21 +5,28 @@
 #rotate-hint { display:none; }
 
 @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
-  /* Alles außer dem Hinweis ausblenden */
+
+  /* Erst alle Inhalte verstecken … */
   body > * {
     display: none !important;
   }
 
-  /* Hinweis-Stil */
+  /* … dann explizit nur den Hinweis wieder sichtbar machen */
   #rotate-hint {
     display: grid !important;
     place-items: center;
     position: fixed !important;
     inset: 0;
-    background: #ffffff; /* Farbe frei wählbar */
-    z-index: 9999;
+    z-index: 99999;
+    background: #ffffff; /* frei wählbar */
     text-align: center;
     padding: 24px;
+
+    /* Safe Areas */
+    padding-top: calc(env(safe-area-inset-top) + 24px);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 24px);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
   }
 
   #rotate-hint .rotate-gif {
@@ -34,6 +41,11 @@
     color: #333;
     margin-top: 8px;
   }
+}
+
+/* GIF bei reduzierter Bewegung abschalten */
+@media (prefers-reduced-motion: reduce) {
+  #rotate-hint .rotate-gif { display: none; }
 }
 
 /* GIF bei reduzierter Bewegung abschalten */
