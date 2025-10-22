@@ -1,56 +1,75 @@
 /* === MAIN – Landing (schlank) ================================= */
 
-/* === Portrait-Ansicht: Seite ausblenden, Hinweis anzeigen === */
+/* ---------------------------
+   ROTATE HINT (robust)
+   Ersetze deinen bisherigen Overlay-Block damit
+   --------------------------- */
+
 #columns { display:block; }
-#rotate-hint { display:none; }
 
-@media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+/* Default: verstecken */
+#rotate-hint { display:none !important; visibility:hidden !important; }
 
-  /* Erst alle Inhalte verstecken … */
+/* Mobile Portrait: alles ausblenden, nur #rotate-hint sichtbar */
+@media screen and (max-width: 995px) and (orientation: portrait) {
+
+  /* 1) Verstecke den Rest der Seite */
   body > * {
     display: none !important;
+    visibility: hidden !important;
   }
 
-  /* … dann explizit nur den Hinweis wieder sichtbar machen */
+  /* 2) Mache den Hinweis sichtbar — hohe Priorität */
   #rotate-hint {
     display: grid !important;
+    visibility: visible !important;
     place-items: center;
     position: fixed !important;
-    inset: 0;
-    z-index: 99999;
-    background: #ffffff; /* frei wählbar */
+    inset: 0 !important;
+    z-index: 2147483647 !important; /* max z-index to beat everything */
+    width: 100% !important;
+    height: 100% !important;
     text-align: center;
-    padding: 24px;
-
-    /* Safe Areas */
-    padding-top: calc(env(safe-area-inset-top) + 24px);
-    padding-bottom: calc(env(safe-area-inset-bottom) + 24px);
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
+    overflow: hidden;
+    background: #ffffff !important; /* anpassen: hex wie #ffffffcc möglich */
+    padding-top: calc(env(safe-area-inset-top) + 24px) !important;
+    padding-bottom: calc(env(safe-area-inset-bottom) + 24px) !important;
+    padding-left: env(safe-area-inset-left) !important;
+    padding-right: env(safe-area-inset-right) !important;
+    -webkit-backface-visibility: hidden !important;
+    backface-visibility: hidden !important;
   }
 
+  /* Innerer Container */
+  #rotate-hint .rotate-inner {
+    position: relative !important;
+    z-index: 2147483648 !important;
+    display: grid;
+    place-items: center;
+    gap: 12px;
+    max-width: 96%;
+    box-sizing: border-box;
+  }
+
+  /* GIF sicher sichtbar */
   #rotate-hint .rotate-gif {
-    width: clamp(180px, 40vmin, 280px);
-    height: auto;
-    display: block;
-    margin: 0 auto 12px;
+    width: clamp(160px, 36vmin, 220px) !important;
+    height: auto !important;
+    display: block !important;
+    margin: 0 auto 12px !important;
+    object-fit: contain !important;
   }
 
-  #rotate-hint p {
-    font-size: clamp(1rem, 2.4vw, 1.4rem);
-    color: #333;
-    margin-top: 8px;
+  #rotate-hint .rotate-text {
+    font-size: clamp(15px, 2.6vw, 18px);
+    color: #111;
+    margin: 0;
   }
 }
 
-/* GIF bei reduzierter Bewegung abschalten */
+/* reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  #rotate-hint .rotate-gif { display: none; }
-}
-
-/* GIF bei reduzierter Bewegung abschalten */
-@media (prefers-reduced-motion: reduce) {
-  #rotate-hint .rotate-gif { display: none; }
+  #rotate-hint .rotate-gif { display:none !important; }
 }
 
 /* === HERO mit Hintergrundbild (Main) ===================== */

@@ -296,3 +296,30 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('resize', toggleOverlay);
   window.addEventListener('orientationchange', () => setTimeout(toggleOverlay,150));
 })();
+
+
+
+
+// JS-Fallback: sorgt dafür, dass #rotate-hint definitiv sichtbar wird (bei Portrait auf Mobile)
+(function(){
+  function showIfPortrait(){
+    var el = document.getElementById('rotate-hint');
+    if (!el) return;
+    var isPortrait = window.matchMedia('(orientation: portrait)').matches;
+    var isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isMobile && isPortrait){
+      el.style.display = 'grid';
+      el.style.visibility = 'visible';
+      // ensure inner image visible
+      var img = el.querySelector('.rotate-gif');
+      if (img) img.style.display = 'block';
+    } else {
+      el.style.display = '';
+      el.style.visibility = '';
+      if (el.querySelector('.rotate-gif')) el.querySelector('.rotate-gif').style.display = '';
+    }
+  }
+  document.addEventListener('DOMContentLoaded', showIfPortrait);
+  window.addEventListener('resize', showIfPortrait);
+  window.addEventListener('orientationchange', function(){ setTimeout(showIfPortrait, 150); });
+})();
