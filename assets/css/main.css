@@ -6,7 +6,7 @@
 
 @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
   /* Alles außer dem Hinweis ausblenden */
-  body > *:not(#rotate-hint) {
+  body > * {
     display: none !important;
   }
 
@@ -14,7 +14,7 @@
   #rotate-hint {
     display: grid !important;
     place-items: center;
-    position: fixed;
+    position: fixed !important;
     inset: 0;
     background: #ffffff; /* Farbe frei wählbar */
     z-index: 9999;
@@ -27,6 +27,12 @@
     height: auto;
     display: block;
     margin: 0 auto 12px;
+  }
+
+  #rotate-hint p {
+    font-size: clamp(1rem, 2.4vw, 1.4rem);
+    color: #333;
+    margin-top: 8px;
   }
 }
 
