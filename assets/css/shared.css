@@ -117,13 +117,18 @@ header > .container, footer > .container, .container, .container-wider{ padding-
 @media (max-width: 991.98px) {
   body > header {
     transition:
-    transform 0.45s cubic-bezier(0.33, 1, 0.68, 1),
-    opacity 0.45s ease;
+      transform 0.45s cubic-bezier(0.33, 1, 0.68, 1),
+      opacity 0.45s ease;
     will-change: transform, opacity;
   }
 
   body > header.hide-on-scroll {
     transform: translateY(-110%);
+    opacity: 0;
+  }
+
+  body > header:not(.hide-on-scroll) {
+    transform: translateY(0);
     opacity: 1;
   }
 }

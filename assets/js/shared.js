@@ -360,27 +360,31 @@ window.addEventListener('scroll', () => {
     headerEl.classList.remove('is-scrolled');
   }
 
-// === MOBILE NAVBAR BEHAVIOR ===
+// === MOBILE NAVBAR BEHAVIOR (final tuned) ===
 if (window.innerWidth <= 991) {
   const scrollDown = currentScroll > lastScrollY;
   const scrollUp = currentScroll < lastScrollY;
+
   const notAtBottom =
     window.innerHeight + window.scrollY < document.body.offsetHeight - 50;
 
-  // Schwellenwerte in px
-  const hideThreshold = 120;   // ab wann sie verschwindet
-  const showThreshold = 80;    // wie stark man hochscrollen muss, bis sie wiederkommt
+  const hideThreshold = 100; // ab wann sie verschwindet
+  const reappearDistance = 120; // wie viel man hochscrollen muss, bis sie wieder erscheint
 
-  // Wenn runtergescrollt wird (und nicht ganz unten): ausblenden
+  // Scroll Down → ausblenden
   if (scrollDown && currentScroll > hideThreshold && notAtBottom) {
-    headerEl.classList.add('hide-on-scroll');
-    headerEl.dataset.lastHide = currentScroll; // aktuelle Position merken
+    if (!headerEl.classList.contains('hide-on-scroll')) {
+      headerEl.classList.add('hide-on-scroll');
+      headerEl.dataset.lastHideY = currentScroll; // Position merken
+    }
   }
 
-  // Wenn hochgescrollt wird: nur zeigen, wenn man spürbar hochscrollt
+  // Scroll Up → wieder anzeigen, wenn genug nach oben gescrollt
   if (scrollUp) {
-    const lastHide = parseInt(headerEl.dataset.lastHide || 0, 10);
-    if (currentScroll < lastHide - showThreshold || currentScroll < hideThreshold) {
+    const lastHideY = parseInt(headerEl.dataset.lastHideY || 0, 10);
+    const scrolledUp = lastHideY - currentScroll > reappearDistance;
+
+    if (scrolledUp || currentScroll < hideThreshold) {
       headerEl.classList.remove('hide-on-scroll');
     }
   }
