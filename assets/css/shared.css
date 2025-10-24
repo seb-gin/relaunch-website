@@ -101,13 +101,14 @@ header > .container, footer > .container, .container, .container-wider{ padding-
     transition: min-height 0.35s ease, padding 0.35s ease;
   }
   
-  /* Optional: leicht weniger Innenabstand, damit sie kompakter wirkt */
+  /* weniger Innenabstand, damit sie kompakter wirkt */
   body > header.is-scrolled .navbar > .container {
-    padding-block: 0.5rem; /* ruhig testen: 0.4rem bis 0.6rem */
+    padding-block: 0.85rem; 
     transition: padding 0.35s ease;
   }
+  /* Logo skaliert harmonisch mit */
   body > header.is-scrolled .nav-logo {
-  height: clamp(60px, 5vw, 70px); /* vorher 80–99px */
+  height: clamp(60px, 5vw, 70px);
   transition: height 0.35s ease;
 }
 }
