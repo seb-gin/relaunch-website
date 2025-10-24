@@ -360,18 +360,28 @@ window.addEventListener('scroll', () => {
     headerEl.classList.remove('is-scrolled');
   }
 
-// Nur auf Mobile: Navbar beim Runterscrollen ausblenden
+// === MOBILE NAVBAR BEHAVIOR ===
 if (window.innerWidth <= 991) {
   const scrollDown = currentScroll > lastScrollY;
   const scrollUp = currentScroll < lastScrollY;
-
-  // Verhindert, dass die Navbar am Seitenende wieder eingeblendet wird
   const notAtBottom =
     window.innerHeight + window.scrollY < document.body.offsetHeight - 50;
 
-  if (scrollDown && currentScroll > 120 && notAtBottom) {
+  // Schwellenwerte in px
+  const hideThreshold = 120;   // ab wann sie verschwindet
+  const showThreshold = 80;    // wie stark man hochscrollen muss, bis sie wiederkommt
+
+  // Wenn runtergescrollt wird (und nicht ganz unten): ausblenden
+  if (scrollDown && currentScroll > hideThreshold && notAtBottom) {
     headerEl.classList.add('hide-on-scroll');
-  } else if (scrollUp) {
-    headerEl.classList.remove('hide-on-scroll');
+    headerEl.dataset.lastHide = currentScroll; // aktuelle Position merken
+  }
+
+  // Wenn hochgescrollt wird: nur zeigen, wenn man spürbar hochscrollt
+  if (scrollUp) {
+    const lastHide = parseInt(headerEl.dataset.lastHide || 0, 10);
+    if (currentScroll < lastHide - showThreshold || currentScroll < hideThreshold) {
+      headerEl.classList.remove('hide-on-scroll');
+    }
   }
 }})
