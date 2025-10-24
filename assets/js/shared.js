@@ -346,3 +346,28 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('resize', toggleHint);
   window.addEventListener('orientationchange', () => setTimeout(toggleHint, 200));
 })();
+// === NAVBAR SCROLL BEHAVIOR (Avineo) ===
+let lastScrollY = window.scrollY;
+const headerEl = document.querySelector('body > header');
+
+window.addEventListener('scroll', () => {
+  const currentScroll = window.scrollY;
+
+  // Scrollzustand (Farbhintergrund etc. hast du schon)
+  if (currentScroll > 50) {
+    headerEl.classList.add('is-scrolled');
+  } else {
+    headerEl.classList.remove('is-scrolled');
+  }
+
+  // Nur auf Mobile: Navbar beim Runterscrollen ausblenden
+  if (window.innerWidth <= 991) {
+    if (currentScroll > lastScrollY && currentScroll > 120) {
+      headerEl.classList.add('hide-on-scroll');
+    } else {
+      headerEl.classList.remove('hide-on-scroll');
+    }
+  }
+
+  lastScrollY = currentScroll;
+});
