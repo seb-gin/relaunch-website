@@ -346,46 +346,67 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('resize', toggleHint);
   window.addEventListener('orientationchange', () => setTimeout(toggleHint, 200));
 })();
-// === NAVBAR SCROLL BEHAVIOR (Avineo) ===
-let lastScrollY = window.scrollY;
-const headerEl = document.querySelector('body > header');
+// ==========================================
+// NAVBAR SCROLL / SHRINK / HIDE (Desktop + Mobile)
+// ==========================================
+(function () {
+  const headerEl = document.querySelector('body > header');
+  if (!headerEl) return;
 
-window.addEventListener('scroll', () => {
-  const currentScroll = window.scrollY;
+  let lastScrollY = window.scrollY;
+  let ticking = false;
 
-  // Scrollzustand (Farbhintergrund etc. hast du schon)
-  if (currentScroll > 50) {
-    headerEl.classList.add('is-scrolled');
-  } else {
-    headerEl.classList.remove('is-scrolled');
-  }
+  const HIDE_THRESHOLD = 100;      // ab wann sie auf Mobile verschwindet
+  const REAPPEAR_DISTANCE = 120;   // wie weit man hochscrollen muss, bis sie wieder erscheint
+  const BREAKPOINT = 991;          // mobile Grenze
+  const BOTTOM_MARGIN = 60;        // Abstand zum Seitenende
 
-// === MOBILE NAVBAR BEHAVIOR (final tuned) ===
-if (window.innerWidth <= 991) {
-  const scrollDown = currentScroll > lastScrollY;
-  const scrollUp = currentScroll < lastScrollY;
-
-  const notAtBottom =
-    window.innerHeight + window.scrollY < document.body.offsetHeight - 50;
-
-  const hideThreshold = 100; // ab wann sie verschwindet
-  const reappearDistance = 120; // wie viel man hochscrollen muss, bis sie wieder erscheint
-
-  // Scroll Down → ausblenden
-  if (scrollDown && currentScroll > hideThreshold && notAtBottom) {
-    if (!headerEl.classList.contains('hide-on-scroll')) {
-      headerEl.classList.add('hide-on-scroll');
-      headerEl.dataset.lastHideY = currentScroll; // Position merken
+  function onScroll() {
+    if (!ticking) {
+      window.requestAnimationFrame(handleScroll);
+      ticking = true;
     }
   }
 
-  // Scroll Up → wieder anzeigen, wenn genug nach oben gescrollt
-  if (scrollUp) {
-    const lastHideY = parseInt(headerEl.dataset.lastHideY || 0, 10);
-    const scrolledUp = lastHideY - currentScroll > reappearDistance;
+  function handleScroll() {
+    const currentScroll = window.scrollY;
+    const ww = window.innerWidth;
 
-    if (scrolledUp || currentScroll < hideThreshold) {
-      headerEl.classList.remove('hide-on-scroll');
+    // ===== Desktop: Shrink + Blur =====
+    if (currentScroll > 8) headerEl.classList.add('is-scrolled');
+    else headerEl.classList.remove('is-scrolled');
+
+    // ===== Mobile: Hide on Scroll Down / Show on Scroll Up =====
+    if (ww <= BREAKPOINT) {
+      const scrollDown = currentScroll > lastScrollY;
+      const scrollUp = currentScroll < lastScrollY;
+      const docHeight = Math.max(
+        document.documentElement.scrollHeight,
+        document.body.scrollHeight
+      );
+      const atBottom =
+        window.innerHeight + currentScroll >= docHeight - BOTTOM_MARGIN;
+
+      if (scrollDown && currentScroll > HIDE_THRESHOLD && !atBottom) {
+        if (!headerEl.classList.contains('hide-on-scroll')) {
+          headerEl.classList.add('hide-on-scroll');
+          headerEl.dataset.lastHideY = String(currentScroll);
+        }
+      }
+
+      if (scrollUp) {
+        const lastHideY = parseInt(headerEl.dataset.lastHideY || '0', 10);
+        const scrolledUpEnough =
+          lastHideY - currentScroll > REAPPEAR_DISTANCE;
+        if (scrolledUpEnough || currentScroll < HIDE_THRESHOLD) {
+          headerEl.classList.remove('hide-on-scroll');
+        }
+      }
     }
+
+    lastScrollY = currentScroll;
+    ticking = false;
   }
-}})
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+});

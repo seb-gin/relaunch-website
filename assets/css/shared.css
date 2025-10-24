@@ -123,13 +123,13 @@ header > .container, footer > .container, .container, .container-wider{ padding-
   }
 
   body > header.hide-on-scroll {
-    transform: translateY(-110%);
-    opacity: 0;
+    transform: translateY(-110%) !important;
+    opacity: 0 !important;
   }
 
   body > header:not(.hide-on-scroll) {
-    transform: translateY(0);
-    opacity: 1;
+    transform: translateY(0) !important;
+    opacity: 1 !important;
   }
 }
 
