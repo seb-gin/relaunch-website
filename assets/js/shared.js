@@ -349,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // ==========================================
 // NAVBAR SCROLL / SHRINK / HIDE (Desktop + Mobile)
 // ==========================================
-(function () {
+document.addEventListener('DOMContentLoaded', () => {
   const headerEl = document.querySelector('body > header');
   if (!headerEl) return;
 
@@ -380,6 +380,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (ww <= BREAKPOINT) {
       const scrollDown = currentScroll > lastScrollY;
       const scrollUp = currentScroll < lastScrollY;
+
       const docHeight = Math.max(
         document.documentElement.scrollHeight,
         document.body.scrollHeight
@@ -388,10 +389,8 @@ document.addEventListener('DOMContentLoaded', function () {
         window.innerHeight + currentScroll >= docHeight - BOTTOM_MARGIN;
 
       if (scrollDown && currentScroll > HIDE_THRESHOLD && !atBottom) {
-        if (!headerEl.classList.contains('hide-on-scroll')) {
-          headerEl.classList.add('hide-on-scroll');
-          headerEl.dataset.lastHideY = String(currentScroll);
-        }
+        headerEl.classList.add('hide-on-scroll');
+        headerEl.dataset.lastHideY = String(currentScroll);
       }
 
       if (scrollUp) {
