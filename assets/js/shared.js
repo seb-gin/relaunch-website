@@ -360,14 +360,18 @@ window.addEventListener('scroll', () => {
     headerEl.classList.remove('is-scrolled');
   }
 
-  // Nur auf Mobile: Navbar beim Runterscrollen ausblenden
-  if (window.innerWidth <= 991) {
-    if (currentScroll > lastScrollY && currentScroll > 120) {
-      headerEl.classList.add('hide-on-scroll');
-    } else {
-      headerEl.classList.remove('hide-on-scroll');
-    }
-  }
+// Nur auf Mobile: Navbar beim Runterscrollen ausblenden
+if (window.innerWidth <= 991) {
+  const scrollDown = currentScroll > lastScrollY;
+  const scrollUp = currentScroll < lastScrollY;
 
-  lastScrollY = currentScroll;
-});
+  // Verhindert, dass die Navbar am Seitenende wieder eingeblendet wird
+  const notAtBottom =
+    window.innerHeight + window.scrollY < document.body.offsetHeight - 50;
+
+  if (scrollDown && currentScroll > 120 && notAtBottom) {
+    headerEl.classList.add('hide-on-scroll');
+  } else if (scrollUp) {
+    headerEl.classList.remove('hide-on-scroll');
+  }
+}})

@@ -92,15 +92,24 @@ footer,
 header > .container, footer > .container, .container, .container-wider{ padding-inline: 0; }
 
 /* ================= NAVBAR ================= */
-
-/* === NAVBAR SCROLL BEHAVIOR (Avineo) === */
+/* === NAVBAR SCROLL BEHAVIOR === */
 
 /* Desktop – Navbar schrumpft leicht beim Scrollen */
 @media (min-width: 992px) {
   body > header.is-scrolled .navbar {
-    min-height: calc(var(--nav-h) * 0.7);
-    transition: min-height 0.3s ease, padding 0.3s ease;
+    min-height: calc(var(--nav-h) * 0.6);
+    transition: min-height 0.35s ease, padding 0.35s ease;
   }
+  
+  /* Optional: leicht weniger Innenabstand, damit sie kompakter wirkt */
+  body > header.is-scrolled .navbar > .container {
+    padding-block: 0.5rem; /* ruhig testen: 0.4rem bis 0.6rem */
+    transition: padding 0.35s ease;
+  }
+  body > header.is-scrolled .nav-logo {
+  height: clamp(60px, 5vw, 70px); /* vorher 80–99px */
+  transition: height 0.35s ease;
+}
 }
 
 /* Mobile – Navbar ausblenden beim Runterscrollen */
