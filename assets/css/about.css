@@ -82,15 +82,15 @@
 
 /* etwas Luft unter Image-Blocks auf Mobile */
 @media (max-width: 991.98px) {
-  .about-portrait { margin-bottom: 30px; }
-  .about-logos { margin-bottom: 30px; }
-  .about-logos__subs { gap: 20px; } /* kleiner Abstand auf Mobilgeräten */
+  .about-portrait {margin-bottom: 30px; width: clamp(260px, 50vw, 480px);}
+  .about-logos {margin-bottom: 30px; --main-size: clamp(280px, 48vw, 400px);}
+  .about-logos__subs {gap: 20px;}
 }
 
 /* Optional: Verkleinerung bei sehr kleinen Bildschirmen */
 @media (max-width: 420px) {
   .about-portrait { width: clamp(160px, 40vw, 220px); }
-  .about-logos { --main-size: clamp(160px, 40vw, 240px); }
+  .about-logos { --main-size: clamp(200px, 50vw, 280px); }
   .about-logo-chip { width: calc(var(--main-size) / 3); height: calc(var(--main-size) / 3); }
-  .about-logo-chip img { height: calc(var(--main-size) / 6); }
+  .about-logo-chip img { height: calc(var(--main-size) / 5.5); }
 }
