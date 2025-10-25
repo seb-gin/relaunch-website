@@ -91,6 +91,6 @@
 @media (max-width: 420px) {
   .about-portrait { width: clamp(160px, 40vw, 220px); }
   .about-logos { --main-size: clamp(160px, 40vw, 240px); }
-  .about-logo-chip { width: calc(var(--main-size) / 5); height: calc(var(--main-size) / 5); }
-  .about-logo-chip img { height: calc(var(--main-size) / 10); }
+  .about-logo-chip { width: calc(var(--main-size) / 3); height: calc(var(--main-size) / 3); }
+  .about-logo-chip img { height: calc(var(--main-size) / 6); }
 }
