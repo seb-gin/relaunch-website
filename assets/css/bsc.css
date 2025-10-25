@@ -8,7 +8,7 @@
 /* 2) Hero B – Bild & Lesbarkeit
    Hinweis: Pfad relativ zur CSS-Datei (assets/css) -> ../img/... */
 .hero--b{
-  --hero-b-img: url("/assets/img/bsc/container_hafen.jpg"); /* Datei in assets/img/b */
+  --hero-b-img: url("../img/bsc/container_hafen.jpg"); /* Datei in assets/img/b */
   min-height: clamp(320px, 60vh, 680px);
   display: grid;
   align-items: center;

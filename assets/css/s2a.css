@@ -7,7 +7,7 @@
 
 /* 2) Hero A – Bild & Lesbarkeit */
 .hero--a{
-  --hero-a-img: url("/assets/img/s2a/code.jpg"); /* Datei in assets/img/a */
+  --hero-a-img: url("../img/s2a/code.jpg"); /* Datei in assets/img/a */
   min-height: clamp(320px, 60vh, 680px);
   display: grid;
   align-items: center;
