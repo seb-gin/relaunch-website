@@ -226,12 +226,15 @@ body > header .navbar-toggler-icon{ filter: invert(1) brightness(1.4); }
   height: 2px;
   background: var(--toggle-line);
   border-radius: 2px;
-  transition: all 0.35s ease;
+  transition: transform .35s ease, background-color .35s ease, opacity .2s ease;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /* Position der Linien */
-.menu__icon::before { transform: translateY(-7px); }
-.menu__icon::after  { transform: translateY(7px); }
+.menu__icon::before { transform: translate(-50%, -50%) translateY(-7px); }
+.menu__icon::after  { transform: translate(-50%, -50%) translateY(7px); }
 
 /* === Zustand: Menü geöffnet === */
 .menu__toggle[aria-expanded="true"] {
@@ -241,21 +244,22 @@ body > header .navbar-toggler-icon{ filter: invert(1) brightness(1.4); }
 
 /* Linien werden zum X */
 .menu__toggle[aria-expanded="true"] .menu__icon {
-  background: transparent;
+  background-color: transparent;
 }
 
 .menu__toggle[aria-expanded="true"] .menu__icon::before {
-  transform: rotate(45deg);
+  transform: translate (-50%, -50%) rotate(45deg);
   background: var(--toggle-x);
 }
 
 .menu__toggle[aria-expanded="true"] .menu__icon::after {
-  transform: rotate(-45deg);
+  transform: translate (-50%, -50%) rotate(-45deg);
   background: var(--toggle-x);
 }
 
 .menu__toggle[aria-expanded="true"] .menu__icon::before,
 .menu__toggle[aria-expanded="true"] .menu__icon::after {
+  background-color: var(--toggle-x);
   transform-origin: center;
 }
 
