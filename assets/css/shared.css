@@ -200,9 +200,9 @@ body > header .navbar-toggler-icon{ filter: invert(1) brightness(1.4); }
 /* Basiszustand */
 .menu__toggle {
   --toggle-border: #fff;       /* Rahmenfarbe (Burger) */
-  /* --toggle-fill: #fff;         /* Füllfarbe (X) */
+  --toggle-fill: #ffba08;         /* Füllfarbe (X) */
   --toggle-line: #fff;         /* Linienfarbe (Burger) */
-  --toggle-x: #000;            /* Linienfarbe (X) */
+  --toggle-x: #021740;            /* Linienfarbe (X) */
 
   position: relative;
   width: var(--toggler-size);
@@ -252,6 +252,11 @@ body > header .navbar-toggler-icon{ filter: invert(1) brightness(1.4); }
 .menu__toggle[aria-expanded="true"] .menu__icon::after {
   transform: rotate(-45deg);
   background: var(--toggle-x);
+}
+
+.menu__toggle[aria-expanded="true"] .menu__icon::before,
+.menu__toggle[aria-expanded="true"] .menu__icon::after {
+  transform-origin: center;
 }
 
 /* Optional – Tap Feedback */
