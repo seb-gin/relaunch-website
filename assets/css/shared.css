@@ -199,9 +199,9 @@ body > header .navbar-toggler-icon{ filter: invert(1) brightness(1.4); }
 .menu__toggle {
   /* CI-Farben und Steuer-Variablen */
   --toggle-border: #fff;       /* Rahmenfarbe im Burger-Zustand */
-  --toggle-fill: #ffba08;      /* Füllfarbe im X-Zustand */
+  --toggle-fill: #021740;      /* Füllfarbe im X-Zustand */
   --toggle-line: #fff;         /* Linienfarbe im Burger-Zustand */
-  --toggle-x: #021740;         /* Linienfarbe im X-Zustand */
+  --toggle-x: #fff;         /* Linienfarbe im X-Zustand */
 
   /* Liniengeometrie */
   --line-w: 22px;              /* Linienlänge */
