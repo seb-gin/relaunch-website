@@ -136,12 +136,13 @@ header > .container, footer > .container, .container, .container-wider{ padding-
   .navbar-nav {
     display: flex;
     flex-direction: column;
-    gap: 40px; /* Abstand zwischen Links */
+    gap: 15px; /* Abstand zwischen Links */
   }
 
   /* optional: Button leicht absetzen */
   .navbar-nav .btn {
-    margin-top: 20px;
+    margin-top: 10px;
+    margin-bottom: 15px;
   }
 }
 
