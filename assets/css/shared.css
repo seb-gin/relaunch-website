@@ -200,7 +200,7 @@ body > header .navbar-toggler-icon{ filter: invert(1) brightness(1.4); }
 /* Basiszustand */
 .menu__toggle {
   --toggle-border: #fff;       /* Rahmenfarbe (Burger) */
-  --toggle-fill: #fff;         /* Füllfarbe (X) */
+  /* --toggle-fill: #fff;         /* Füllfarbe (X) */
   --toggle-line: #fff;         /* Linienfarbe (Burger) */
   --toggle-x: #000;            /* Linienfarbe (X) */
 
