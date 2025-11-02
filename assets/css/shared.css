@@ -284,6 +284,68 @@ body > header .navbar-toggler-icon{ filter: invert(1) brightness(1.4); }
   justify-content: center;
 }
 
+/* ===== Elastic Ease for Burger → X ===== */
+
+/* Linien federn ins X */
+@keyframes av-x-before {
+  0%   { transform: translate(-50%, -50%) rotate(0deg)   scaleX(0.65); }
+  60%  { transform: translate(-50%, -50%) rotate(52deg)  scaleX(1.15); }
+  100% { transform: translate(-50%, -50%) rotate(45deg)  scaleX(1); }
+}
+@keyframes av-x-after {
+  0%   { transform: translate(-50%, -50%) rotate(0deg)    scaleX(0.65); }
+  60%  { transform: translate(-50%, -50%) rotate(-52deg)  scaleX(1.15); }
+  100% { transform: translate(-50%, -50%) rotate(-45deg)  scaleX(1); }
+}
+
+/* Button selbst macht einen kleinen Pop */
+@keyframes av-btn-pop {
+  0%   { transform: rotate(180deg) scale(0.94); }
+  60%  { transform: rotate(180deg) scale(1.04); }
+  100% { transform: rotate(180deg) scale(1); }
+}
+
+/* Beim Öffnen anwenden */
+.menu__toggle[aria-expanded="true"] .menu__icon::before {
+  animation: av-x-before .45s cubic-bezier(.2,1.4,.34,1) both;
+}
+.menu__toggle[aria-expanded="true"] .menu__icon::after {
+  animation: av-x-after  .45s cubic-bezier(.2,1.4,.34,1) both .02s; /* mini Verzögerung */
+}
+
+/* Den Rotations-Flip des Buttons durch Pop ersetzen */
+.menu__toggle[aria-expanded="true"] {
+  /* du hast bereits background + rotate(180deg) gesetzt – wir ersetzen nur die Bewegung */
+  animation: av-btn-pop .42s cubic-bezier(.2,1.4,.34,1) both;
+}
+
+/* Optional: beim Schließen wieder „zurückfedern“ (symmetrisch) */
+@keyframes av-burger-top {
+  0%   { transform: translate(-50%, -50%) rotate(45deg)  scaleX(1); }
+  60%  { transform: translate(-50%, -50%) rotate(8deg)   scaleX(1.1); }
+  100% { transform: translate(-50%, -50%) translateY(-7px) rotate(0deg) scaleX(1); }
+}
+@keyframes av-burger-bot {
+  0%   { transform: translate(-50%, -50%) rotate(-45deg) scaleX(1); }
+  60%  { transform: translate(-50%, -50%) rotate(-8deg)  scaleX(1.1); }
+  100% { transform: translate(-50%, -50%) translateY(7px) rotate(0deg)  scaleX(1); }
+}
+.menu__toggle:not([aria-expanded="true"]) .menu__icon::before {
+  animation: av-burger-top .34s cubic-bezier(.2,1.4,.34,1) both;
+}
+.menu__toggle:not([aria-expanded="true"]) .menu__icon::after {
+  animation: av-burger-bot .34s cubic-bezier(.2,1.4,.34,1) both .02s;
+}
+
+/* Accessibility: Bewegungen reduzieren */
+@media (prefers-reduced-motion: reduce) {
+  .menu__toggle,
+  .menu__icon, .menu__icon::before, .menu__icon::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
 
 
 /* A/B Switcher */
