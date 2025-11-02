@@ -196,11 +196,13 @@ body > header { filter: invert(1) brightness(1.4); }
 .navbar .navbar-toggler { margin-right: 0; }
 
 /* ====== BURGER TO X ANIMATION ====== */
+
+/* Basiszustand */
 .menu__toggle {
   --toggle-border: #fff;       /* Rahmenfarbe (Burger) */
-  --toggle-fill: #ffba08;      /* Füllfarbe (X) */
+  /* --toggle-fill: #fff;         /* Füllfarbe (X) */
   --toggle-line: #fff;         /* Linienfarbe (Burger) */
-  --toggle-x: #021740;         /* Linienfarbe (X) */
+  --toggle-x: #000;            /* Linienfarbe (X) */
 
   position: relative;
   width: var(--toggler-size);
@@ -214,6 +216,7 @@ body > header { filter: invert(1) brightness(1.4); }
   justify-content: center;
 }
 
+/* Die drei Linien */
 .menu__icon,
 .menu__icon::before,
 .menu__icon::after {
@@ -226,15 +229,17 @@ body > header { filter: invert(1) brightness(1.4); }
   transition: all 0.35s ease;
 }
 
+/* Position der Linien */
 .menu__icon::before { transform: translateY(-7px); }
 .menu__icon::after  { transform: translateY(7px); }
 
-/* Menü geöffnet */
+/* === Zustand: Menü geöffnet === */
 .menu__toggle[aria-expanded="true"] {
   background: var(--toggle-fill);
   transform: rotate(180deg);
 }
 
+/* Linien werden zum X */
 .menu__toggle[aria-expanded="true"] .menu__icon {
   background: transparent;
 }
@@ -249,15 +254,10 @@ body > header { filter: invert(1) brightness(1.4); }
   background: var(--toggle-x);
 }
 
-.menu__toggle[aria-expanded="true"] .menu__icon::before,
-.menu__toggle[aria-expanded="true"] .menu__icon::after {
-  transform-origin: center;
-}
-
+/* Optional – Tap Feedback */
 .menu__toggle:active {
   transform: scale(0.92);
 }
-
 
 
 /* A/B Switcher */
