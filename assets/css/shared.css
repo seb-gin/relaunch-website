@@ -195,6 +195,71 @@ body > header .navbar-toggler-icon{ filter: invert(1) brightness(1.4); }
 .navbar .navbar-brand { margin-left: 0; }
 .navbar .navbar-toggler { margin-right: 0; }
 
+/* ====== BURGER TO X ANIMATION ====== */
+
+/* Basiszustand */
+.menu__toggle {
+  --toggle-border: #fff;       /* Rahmenfarbe (Burger) */
+  --toggle-fill: #fff;         /* Füllfarbe (X) */
+  --toggle-line: #fff;         /* Linienfarbe (Burger) */
+  --toggle-x: #000;            /* Linienfarbe (X) */
+
+  position: relative;
+  width: var(--toggler-size);
+  height: var(--toggler-size);
+  border: 2px solid var(--toggle-border);
+  border-radius: 50%;
+  background: transparent;
+  transition: all 0.35s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Die drei Linien */
+.menu__icon,
+.menu__icon::before,
+.menu__icon::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 2px;
+  background: var(--toggle-line);
+  border-radius: 2px;
+  transition: all 0.35s ease;
+}
+
+/* Position der Linien */
+.menu__icon::before { transform: translateY(-7px); }
+.menu__icon::after  { transform: translateY(7px); }
+
+/* === Zustand: Menü geöffnet === */
+.menu__toggle[aria-expanded="true"] {
+  background: var(--toggle-fill);
+  transform: rotate(180deg);
+}
+
+/* Linien werden zum X */
+.menu__toggle[aria-expanded="true"] .menu__icon {
+  background: transparent;
+}
+
+.menu__toggle[aria-expanded="true"] .menu__icon::before {
+  transform: rotate(45deg);
+  background: var(--toggle-x);
+}
+
+.menu__toggle[aria-expanded="true"] .menu__icon::after {
+  transform: rotate(-45deg);
+  background: var(--toggle-x);
+}
+
+/* Optional – Tap Feedback */
+.menu__toggle:active {
+  transform: scale(0.92);
+}
+
+
 /* A/B Switcher */
 .brand-switcher{
   display: inline-grid;
