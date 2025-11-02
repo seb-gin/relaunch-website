@@ -195,14 +195,20 @@ body > header .navbar-toggler-icon{ filter: invert(1) brightness(1.4); }
 .navbar .navbar-brand { margin-left: 0; }
 .navbar .navbar-toggler { margin-right: 0; }
 
-/* ====== BURGER TO X ANIMATION ====== */
-
-/* Basiszustand */
+/* ====== BURGER → X ANIMATION (Avineo) ====== */
 .menu__toggle {
-  --toggle-border: #fff;       /* Rahmenfarbe (Burger) */
-  --toggle-fill: #ffba08;         /* Füllfarbe (X) */
-  --toggle-line: #fff;         /* Linienfarbe (Burger) */
-  --toggle-x: #021740;            /* Linienfarbe (X) */
+  /* CI-Farben und Steuer-Variablen */
+  --toggle-border: #fff;       /* Rahmenfarbe im Burger-Zustand */
+  --toggle-fill: #ffba08;      /* Füllfarbe im X-Zustand */
+  --toggle-line: #fff;         /* Linienfarbe im Burger-Zustand */
+  --toggle-x: #021740;         /* Linienfarbe im X-Zustand */
+
+  /* Liniengeometrie */
+  --line-w: 22px;              /* Linienlänge */
+  --line-h: 2px;               /* Liniendicke */
+  --y-gap: 7px;                /* vertikaler Abstand der Linien (Burger) */
+  --ang-before: 0deg;          /* Winkel der oberen Linie */
+  --ang-after: 0deg;           /* Winkel der unteren Linie */
 
   position: relative;
   width: var(--toggler-size);
@@ -210,51 +216,49 @@ body > header .navbar-toggler-icon{ filter: invert(1) brightness(1.4); }
   border: 2px solid var(--toggle-border);
   border-radius: 50%;
   background: transparent;
-  transition: all 0.35s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.35s ease;
 }
 
-/* Die drei Linien */
+/* Drei Linien (zentriert im Kreis) */
 .menu__icon,
 .menu__icon::before,
 .menu__icon::after {
   content: "";
   position: absolute;
-  width: 22px;
-  height: 2px;
-  background: var(--toggle-line);
-  border-radius: 2px;
-  transition: transform .35s ease, background-color .35s ease, opacity .2s ease;
+  width: var(--line-w);
+  height: var(--line-h);
   top: 50%;
   left: 50%;
+  border-radius: 2px;
+  background-color: var(--toggle-line);
   transform: translate(-50%, -50%);
+  transition: transform .35s ease, background-color .35s ease, opacity .2s ease;
+  z-index: 2;
 }
 
-/* Position der Linien */
-.menu__icon::before { transform: translate(-50%, -50%) translateY(-7px); }
-.menu__icon::after  { transform: translate(-50%, -50%) translateY(7px); }
+/* Positionen im Burger-Zustand */
+.menu__icon::before {
+  transform: translate(-50%, -50%) translateY(calc(-1 * var(--y-gap))) rotate(var(--ang-before));
+}
+.menu__icon::after {
+  transform: translate(-50%, -50%) translateY(var(--y-gap)) rotate(var(--ang-after));
+}
 
-/* === Zustand: Menü geöffnet === */
+/* === Menü geöffnet === */
 .menu__toggle[aria-expanded="true"] {
   background: var(--toggle-fill);
   transform: rotate(180deg);
+  /* Werte für X setzen */
+  --ang-before: 45deg;
+  --ang-after: -45deg;
+  --y-gap: 0px;
 }
 
-/* Linien werden zum X */
 .menu__toggle[aria-expanded="true"] .menu__icon {
-  background-color: transparent;
-}
-
-.menu__toggle[aria-expanded="true"] .menu__icon::before {
-  transform: translate (-50%, -50%) rotate(45deg);
-  background: var(--toggle-x);
-}
-
-.menu__toggle[aria-expanded="true"] .menu__icon::after {
-  transform: translate (-50%, -50%) rotate(-45deg);
-  background: var(--toggle-x);
+  background-color: transparent; /* Mittelstrich verschwindet */
 }
 
 .menu__toggle[aria-expanded="true"] .menu__icon::before,
@@ -263,16 +267,13 @@ body > header .navbar-toggler-icon{ filter: invert(1) brightness(1.4); }
   transform-origin: center;
 }
 
-/* Optional – Tap Feedback */
+/* Tap-Feedback */
 .menu__toggle:active {
   transform: scale(0.92);
 }
-/* === Fix: ensure our custom burger shows above Bootstrap icon === */
-.menu__toggle {
-  position: relative;
-}
 
-/* disable Bootstrap's SVG background *only* inside our custom toggle */
+/* === Bootstrap-Kompatibilitätsfix === */
+/* Deaktiviert Bootstraps Hintergrund-SVG nur in unserem Button */
 .menu__toggle .navbar-toggler-icon {
   background-image: none !important;
   filter: none !important;
@@ -283,12 +284,6 @@ body > header .navbar-toggler-icon{ filter: invert(1) brightness(1.4); }
   justify-content: center;
 }
 
-/* keep our lines above everything else */
-.menu__icon,
-.menu__icon::before,
-.menu__icon::after {
-  z-index: 2;
-}
 
 
 /* A/B Switcher */
