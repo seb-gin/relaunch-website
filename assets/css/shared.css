@@ -131,6 +131,18 @@ header > .container, footer > .container, .container, .container-wider{ padding-
     transform: translateY(0) !important;
     opacity: 1 !important;
   }
+
+  /* NEU – mehr Luft zwischen Menüeinträgen im Burger-Menü */
+  .navbar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 14px; /* Abstand zwischen Links */
+  }
+
+  /* optional: Button leicht absetzen */
+  .navbar-nav .btn {
+    margin-top: 8px;
+  }
 }
 
 body > header{
