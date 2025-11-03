@@ -320,9 +320,9 @@
 }
 
 @keyframes pillar-outline{
-  0%   { box-shadow: 0 0 0 0 rgba(255,186,8,0), 0 0 0 rgba(0,0,0,0); }
-  50%  { box-shadow: 0 0 0 6px rgba(255,186,8,.55), 0 14px 30px rgba(2,23,64,.18); }
-  100% { box-shadow: 0 0 0 0 rgba(255,186,8,0), 0 0 0 rgba(0,0,0,0); }
+  0%   { box-shadow: 0 0 0 0 #ffba0800, 0 0 0 #0000; }
+  50%  { box-shadow: 0 0 0 6px #ffba088c, 0 14px 30px #0217402e; }
+  100% { box-shadow: 0 0 0 0 #ffba0800, 0 0 0 #0000; }
 }
 
 /* Hover/Focus bleibt dezent */
