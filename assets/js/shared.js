@@ -419,3 +419,47 @@ if (window.innerWidth >= 992) {
 
   window.addEventListener('scroll', onScroll, { passive: true });
 });
+
+/* === Avineo: Return-to-Scroll (compact) ===================== */
+document.addEventListener('DOMContentLoaded', () => {
+  const LS_PATH   = 'av_return_path';
+  const LS_SCROLL = 'av_return_scroll';
+  const LS_FLAG   = 'av_restore_on_load';
+
+  // 1) Auf Übersichtsseiten: Klick auf Feature-Links speichert Kontext
+  const featureLinks = document.querySelectorAll(
+    'a[href$="1.html"], a[href$="2.html"], a[href$="3.html"], a[href$="4.html"]'
+  );
+  featureLinks.forEach(a => {
+    a.addEventListener('click', () => {
+      sessionStorage.setItem(LS_PATH,   location.pathname);
+      sessionStorage.setItem(LS_SCROLL, String(window.scrollY));
+    }, { passive: true });
+  });
+
+  // 2) Auf Feature-Seiten: "Zurück"-Button verdrahten
+  const backBtn = document.querySelector('[data-back]');
+  if (backBtn) {
+    const savedPath = sessionStorage.getItem(LS_PATH);
+    const fallback  = backBtn.getAttribute('data-fallback') || '../index.html';
+    backBtn.setAttribute('href', savedPath || fallback);
+
+    backBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      sessionStorage.setItem(LS_FLAG, '1');
+      location.href = savedPath || fallback;
+    });
+  }
+
+  // 3) Auf Zielseite: Scrollposition wiederherstellen
+  if (sessionStorage.getItem(LS_FLAG) === '1') {
+    const savedPath = sessionStorage.getItem(LS_PATH);
+    if (savedPath === location.pathname) {
+      const y = Number(sessionStorage.getItem(LS_SCROLL) || 0);
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: y, behavior: 'smooth' });
+        sessionStorage.removeItem(LS_FLAG);
+      });
+    }
+  }
+});
