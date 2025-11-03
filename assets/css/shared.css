@@ -73,6 +73,8 @@ h1 {
   font-weight: bold;
 }
 
+html { overflow-anchor: none; } /* verhindert auto-scroll-„Korrekturen“ des Browsers */
+
 html,body{
   font-family:var(--font);
   color:var(--ink);
@@ -99,24 +101,30 @@ header > .container, footer > .container, .container, .container-wider{ padding-
 /* ================= NAVBAR ================= */
 /* === NAVBAR SCROLL BEHAVIOR === */
 
-/* Desktop – Navbar schrumpft leicht beim Scrollen */
+/* Desktop – reflow-freier Shrink per transform */
 @media (min-width: 992px) {
+  /* Basis: volle Layout-Höhe bleibt bestehen */
+  body > header .navbar {
+    min-height: var(--nav-h);
+    transform-origin: top center;
+    transition: transform .28s ease, filter .28s ease;
+  }
+
+  /* Visuelles Schrumpfen ohne Layout-Shift */
   body > header.is-scrolled .navbar {
-    min-height: calc(var(--nav-h) * 0.6);
-    transition: min-height 0.35s ease, padding 0.35s ease;
+    transform: scaleY(0.66); /* ~ 34% kleiner – kannst du anpassen (0.6–0.8) */
   }
-  
-  /* weniger Innenabstand, damit sie kompakter wirkt */
-  body > header.is-scrolled .navbar > .container {
-    padding-block: 0.85rem; 
-    transition: padding 0.35s ease;
+
+  /* Logo und Brand leicht mitskalieren (optional, rein visuell) */
+  body > header .nav-logo {
+    transition: transform .28s ease;
+    transform-origin: left center;
   }
-  /* Logo skaliert harmonisch mit */
   body > header.is-scrolled .nav-logo {
-  height: clamp(60px, 5vw, 70px);
-  transition: height 0.35s ease;
+    transform: scale(0.86);
+  }
 }
-}
+
 
 /* Mobile – Navbar ausblenden beim Runterscrollen */
 @media (max-width: 991.98px) {
