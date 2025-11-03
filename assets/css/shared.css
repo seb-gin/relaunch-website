@@ -157,8 +157,14 @@ body > header{
   position: sticky;
   top: 0;
   z-index: 2000;
+
+  /* ⬇️ Anti-Flicker / eigene Render-Layer */
+  will-change: transform, opacity, backdrop-filter, min-height;
+  transform: translateZ(0);
+
   transition: background-color .25s ease, backdrop-filter .25s ease, box-shadow .25s ease;
 }
+
 body > header.is-scrolled{
   background: var(--nav-bg-scroll, var(--nav-bg-top));
   backdrop-filter: saturate(150%) blur(6px);

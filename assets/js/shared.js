@@ -373,8 +373,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const ww = window.innerWidth;
 
     // ===== Desktop: Shrink + Blur =====
-    if (currentScroll > 8) headerEl.classList.add('is-scrolled');
-    else headerEl.classList.remove('is-scrolled');
+    // Desktop: Hysterese gegen Flickern
+    const SCROLL_ADD = 80;   // ab hier wird geschrumpft
+    const SCROLL_REMOVE = 40; // erst ab hier wieder groß
+
+    if (!headerEl.classList.contains('is-scrolled') && currentScroll > SCROLL_ADD) {
+    headerEl.classList.add('is-scrolled');
+    }
+    if (headerEl.classList.contains('is-scrolled') && currentScroll < SCROLL_REMOVE) {
+    headerEl.classList.remove('is-scrolled');
+  }
+
 
     // ===== Mobile: Hide on Scroll Down / Show on Scroll Up =====
     if (ww <= BREAKPOINT) {
