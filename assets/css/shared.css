@@ -99,24 +99,39 @@ header > .container, footer > .container, .container, .container-wider{ padding-
 /* ================= NAVBAR ================= */
 /* === NAVBAR SCROLL BEHAVIOR === */
 
-/* Desktop – Navbar schrumpft leicht beim Scrollen */
+/* === Desktop: echtes Shrink ohne Verzerrung (Logo proportional) === */
 @media (min-width: 992px) {
-  body > header.is-scrolled .navbar {
-    min-height: calc(var(--nav-h) * 0.6);
-    transition: min-height 0.35s ease, padding 0.35s ease;
+  /* Basis */
+  body > header .navbar {
+    min-height: var(--nav-h);       /* z. B. 150px */
+    padding-block: 0;               /* wir steuern Padding im Container */
   }
-  
-  /* weniger Innenabstand, damit sie kompakter wirkt */
-  body > header.is-scrolled .navbar > .container {
-    padding-block: 0.85rem; 
-    transition: padding 0.35s ease;
+
+  /* Shrink-Zustand (kein Transition auf min-height → verhindert Flackern) */
+  body > header.shrink .navbar {
+    min-height: calc(var(--nav-h) * 0.62); /* ~93px bei 150px; passe 0.60–0.70 */
   }
-  /* Logo skaliert harmonisch mit */
-  body > header.is-scrolled .nav-logo {
-  height: clamp(60px, 5vw, 70px);
-  transition: height 0.35s ease;
+
+  /* Innenabstand weich animieren statt Höhe */
+  .navbar > .container,
+  .navbar > .container-fluid {
+    transition: padding .28s ease;
+  }
+  body > header.shrink .navbar > .container,
+  body > header.shrink .navbar > .container-fluid {
+    padding-block: 0.80rem; /* etwas Luft im kleinen Zustand */
+  }
+
+  /* Logo proportional: nur Höhe ändern → kein Verzerren */
+  .nav-logo {
+    transition: height .28s ease;
+    /* dein Default bleibt: clamp(var(--brand-logo-min), var(--brand-logo-vw), var(--brand-logo-max)) */
+  }
+  body > header.shrink .nav-logo {
+    height: clamp(56px, 4.6vw, 72px); /* sauber kleiner; passe bei Bedarf */
+  }
 }
-}
+
 
 /* Mobile – Navbar ausblenden beim Runterscrollen */
 @media (max-width: 991.98px) {
