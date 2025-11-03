@@ -140,7 +140,6 @@ header > .container, footer > .container, .container, .container-wider{ padding-
   }
 }
 
-
 /* Mobile – Navbar ausblenden beim Runterscrollen */
 @media (max-width: 991.98px) {
   body > header {
@@ -229,20 +228,20 @@ body > header .navbar-toggler-icon{ filter: invert(1) brightness(1.4); }
 .navbar .navbar-brand { margin-left: 0; }
 .navbar .navbar-toggler { margin-right: 0; }
 
-/* ====== BURGER → X ANIMATION (Avineo) ====== */
+/* ====== BURGER → X ANIMATION (Avineo – optimierte Version) ====== */
 .menu__toggle {
   /* CI-Farben und Steuer-Variablen */
   --toggle-border: #fff;       /* Rahmenfarbe im Burger-Zustand */
   --toggle-fill: #021740;      /* Füllfarbe im X-Zustand */
   --toggle-line: #fff;         /* Linienfarbe im Burger-Zustand */
-  --toggle-x: #fff;         /* Linienfarbe im X-Zustand */
+  --toggle-x: #fff;            /* Linienfarbe im X-Zustand */
 
   /* Liniengeometrie */
   --line-w: 22px;              /* Linienlänge */
   --line-h: 2px;               /* Liniendicke */
-  --y-gap: 7px;                /* vertikaler Abstand der Linien (Burger) */
-  --ang-before: 0deg;          /* Winkel der oberen Linie */
-  --ang-after: 0deg;           /* Winkel der unteren Linie */
+  --y: 7px;                    /* vertikaler Abstand der Linien im Burger */
+  --rot-top: 0deg;             /* Startwinkel obere Linie */
+  --rot-bot: 0deg;             /* Startwinkel untere Linie */
 
   position: relative;
   width: var(--toggler-size);
@@ -253,7 +252,8 @@ body > header .navbar-toggler-icon{ filter: invert(1) brightness(1.4); }
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.35s ease;
+  transition: background .35s ease, border-color .35s ease;
+  cursor: pointer;
 }
 
 /* Drei Linien (zentriert im Kreis) */
@@ -268,37 +268,40 @@ body > header .navbar-toggler-icon{ filter: invert(1) brightness(1.4); }
   left: 50%;
   border-radius: 2px;
   background-color: var(--toggle-line);
+  transform-origin: center;
   transform: translate(-50%, -50%);
-  transition: transform .35s ease, background-color .35s ease, opacity .2s ease;
+  transition: transform .35s cubic-bezier(.2,1.4,.34,1),
+              background-color .25s ease,
+              opacity .2s ease;
   z-index: 2;
 }
 
-/* Positionen im Burger-Zustand */
+/* Linienpositionen im Burger-Zustand */
 .menu__icon::before {
-  transform: translate(-50%, -50%) translateY(calc(-1 * var(--y-gap))) rotate(var(--ang-before));
+  transform: translate(-50%, -50%) translateY(calc(-1 * var(--y))) rotate(var(--rot-top));
 }
 .menu__icon::after {
-  transform: translate(-50%, -50%) translateY(var(--y-gap)) rotate(var(--ang-after));
+  transform: translate(-50%, -50%) translateY(var(--y)) rotate(var(--rot-bot));
 }
 
 /* === Menü geöffnet === */
 .menu__toggle[aria-expanded="true"] {
   background: var(--toggle-fill);
-  transform: rotate(180deg);
-  /* Werte für X setzen */
-  --ang-before: 45deg;
-  --ang-after: -45deg;
-  --y-gap: 0px;
+  --y: 0px;
+  --rot-top: 45deg;
+  --rot-bot: -45deg;
+  animation: av-btn-pop .42s cubic-bezier(.2,1.4,.34,1) both;
 }
 
+/* Mittelstrich ausblenden */
 .menu__toggle[aria-expanded="true"] .menu__icon {
-  background-color: transparent; /* Mittelstrich verschwindet */
+  background-color: transparent;
 }
 
+/* Linien werden zum X */
 .menu__toggle[aria-expanded="true"] .menu__icon::before,
 .menu__toggle[aria-expanded="true"] .menu__icon::after {
   background-color: var(--toggle-x);
-  transform-origin: center;
 }
 
 /* Tap-Feedback */
@@ -318,51 +321,23 @@ body > header .navbar-toggler-icon{ filter: invert(1) brightness(1.4); }
   justify-content: center;
 }
 
-/* ===== Elastic Ease for Burger → X ===== */
-
-/* Linien federn ins X */
-@keyframes av-x-before {
-  0%   { transform: translate(-50%, -50%) rotate(0deg)   scaleX(0.65); }
-  60%  { transform: translate(-50%, -50%) rotate(52deg)  scaleX(1.15); }
-  100% { transform: translate(-50%, -50%) rotate(45deg)  scaleX(1); }
-}
-@keyframes av-x-after {
-  0%   { transform: translate(-50%, -50%) rotate(0deg)    scaleX(0.65); }
-  60%  { transform: translate(-50%, -50%) rotate(-52deg)  scaleX(1.15); }
-  100% { transform: translate(-50%, -50%) rotate(-45deg)  scaleX(1); }
-}
-
-/* Button selbst macht einen kleinen Pop */
+/* === Button-Pop beim Öffnen === */
 @keyframes av-btn-pop {
-  0%   { transform: rotate(180deg) scale(0.94); }
-  60%  { transform: rotate(180deg) scale(1.04); }
-  100% { transform: rotate(180deg) scale(1); }
+  0%   { transform: scale(0.94); }
+  60%  { transform: scale(1.04); }
+  100% { transform: scale(1); }
 }
 
-/* Beim Öffnen anwenden */
-.menu__toggle[aria-expanded="true"] .menu__icon::before {
-  animation: av-x-before .45s cubic-bezier(.2,1.4,.34,1) both;
-}
-.menu__toggle[aria-expanded="true"] .menu__icon::after {
-  animation: av-x-after  .45s cubic-bezier(.2,1.4,.34,1) both .02s; /* mini Verzögerung */
-}
-
-/* Den Rotations-Flip des Buttons durch Pop ersetzen */
-.menu__toggle[aria-expanded="true"] {
-  /* du hast bereits background + rotate(180deg) gesetzt – wir ersetzen nur die Bewegung */
-  animation: av-btn-pop .42s cubic-bezier(.2,1.4,.34,1) both;
-}
-
-/* Optional: beim Schließen wieder „zurückfedern“ (symmetrisch) */
+/* === Optional: sanfte Rück-Animation beim Schließen === */
 @keyframes av-burger-top {
-  0%   { transform: translate(-50%, -50%) rotate(45deg)  scaleX(1); }
-  60%  { transform: translate(-50%, -50%) rotate(8deg)   scaleX(1.1); }
+  0%   { transform: translate(-50%, -50%) rotate(45deg) scaleX(1); }
+  60%  { transform: translate(-50%, -50%) rotate(8deg) scaleX(1.1); }
   100% { transform: translate(-50%, -50%) translateY(-7px) rotate(0deg) scaleX(1); }
 }
 @keyframes av-burger-bot {
   0%   { transform: translate(-50%, -50%) rotate(-45deg) scaleX(1); }
-  60%  { transform: translate(-50%, -50%) rotate(-8deg)  scaleX(1.1); }
-  100% { transform: translate(-50%, -50%) translateY(7px) rotate(0deg)  scaleX(1); }
+  60%  { transform: translate(-50%, -50%) rotate(-8deg) scaleX(1.1); }
+  100% { transform: translate(-50%, -50%) translateY(7px) rotate(0deg) scaleX(1); }
 }
 .menu__toggle:not([aria-expanded="true"]) .menu__icon::before {
   animation: av-burger-top .34s cubic-bezier(.2,1.4,.34,1) both;
@@ -371,7 +346,7 @@ body > header .navbar-toggler-icon{ filter: invert(1) brightness(1.4); }
   animation: av-burger-bot .34s cubic-bezier(.2,1.4,.34,1) both .02s;
 }
 
-/* Accessibility: Bewegungen reduzieren */
+/* === Accessibility: Bewegungen reduzieren === */
 @media (prefers-reduced-motion: reduce) {
   .menu__toggle,
   .menu__icon, .menu__icon::before, .menu__icon::after {
@@ -379,8 +354,6 @@ body > header .navbar-toggler-icon{ filter: invert(1) brightness(1.4); }
     animation: none !important;
   }
 }
-
-
 
 /* A/B Switcher */
 .brand-switcher{
