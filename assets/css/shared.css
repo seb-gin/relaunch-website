@@ -68,9 +68,17 @@
 }
 
 /* ================= BASICS ================= */
-h1 {
-  font-size: 100px;
-  font-weight: bold;
+
+h1{
+  /* min, bevorzugte (viewportskalierte) Größe, max */
+  font-size: clamp(32px, 6vw, 100px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+}
+.lead{
+  font-size: clamp(16px, 2.2vw, 22px);
+  line-height: 1.4;
 }
 
 html,body{
