@@ -292,9 +292,7 @@
   }
 }
 
-/* === Pillar Reveal – Jump + Pulse =================================== */
-
-/* Basis: Macht das Hochspringen sichtbar über dem Hero-Button */
+/* === Pillar Reveal – Jump (langsamer, ease-in-out) ================== */
 #columns .tile{
   position: relative;
   will-change: transform, box-shadow;
@@ -302,24 +300,23 @@
   z-index: 1;
 }
 
-/* Klasse, die während des „Sprungs“ aktiv ist */
+/* etwas längerer, weicher Sprung */
 #columns.pillars-animate .tile{
-  animation: pillar-lift .8s cubic-bezier(.2,1.2,.2,1) both;
-  z-index: 50; /* über dem Hero-Button */
+  animation: pillar-lift 1.15s cubic-bezier(.42,0,.58,1) both; /* ease-in-out */
+  z-index: 50;
 }
 
-/* Sequenz: hoch – kurzer Peak – zurück mit leichtem Overshoot */
 @keyframes pillar-lift{
   0%   { transform: translateY(0); }
-  35%  { transform: translateY(-30vh); }
-  55%  { transform: translateY(-33vh); } /* kleine Spitze für „verdecken“ */
-  85%  { transform: translateY(6px); }   /* mini-overshoot nach unten */
+  35%  { transform: translateY(-28vh); }
+  55%  { transform: translateY(-31vh); } /* kurze Spitze zum Verdecken */
+  85%  { transform: translateY(6px); }   /* sanfter Overshoot */
   100% { transform: translateY(0); }
 }
 
-/* Pulsierender Signature-Rand (ohne Layout-Shift via box-shadow) */
+/* === Signature Outline – jetzt endlos, bis Klick ==================== */
 .pillar-cta-outline{
-  animation: pillar-outline 1.2s ease-out 0s 2;
+  animation: pillar-outline 1.15s ease-out 0s infinite;
 }
 
 @keyframes pillar-outline{
@@ -328,13 +325,13 @@
   100% { box-shadow: 0 0 0 0 rgba(255,186,8,0), 0 0 0 rgba(0,0,0,0); }
 }
 
-/* Hover bleibt dezent */
+/* Hover/Focus bleibt dezent */
 #columns .tile:hover, #columns .tile:focus-visible{
   transform: translateY(-2px);
   box-shadow: 0 10px 28px rgba(2,23,64,.12);
 }
 
-/* Bewegungs-reduziert: kein Springen, nur Fokus-Ring + direktes Scrollen */
+/* Bewegungs-reduziert */
 @media (prefers-reduced-motion: reduce){
   #columns.pillars-animate .tile{ animation: none !important; }
   .pillar-cta-outline{ animation: none !important; box-shadow: 0 0 0 3px #FFBA08; }

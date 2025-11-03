@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-/* === Avineo: Pillar Reveal (Jump → Pulse → Scroll) =================== */
+/* === Avineo: Pillar Reveal (Jump → Scroll → Pulse until click) ======= */
 document.addEventListener('DOMContentLoaded', () => {
   const cta = document.querySelector('[data-pillar-reveal]');
   const columns = document.getElementById('columns');
@@ -15,55 +15,50 @@ document.addEventListener('DOMContentLoaded', () => {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Timings (ms)
-  const LIFT_MS   = reduceMotion ? 0   : 800;  // Dauer des Sprungs
-  const PULSE_MS  = reduceMotion ? 0   : 1200; // Dauer eines Pulses
-  const PULSE_REP = reduceMotion ? 0   : 2;    // Wiederholungen
+  const LIFT_MS = reduceMotion ? 0 : 1150; // Sprungdauer (CSS 1.15s)
+  const AFTER_SCROLL_WAIT = reduceMotion ? 0 : 150; // kurze Layout-Stabi nach Scroll
 
-  function addOutlinePulse(){
+  function startPulse() {
     tiles.forEach(t => {
-      t.classList.remove('pillar-cta-outline'); // reset für erneuten Klick
-      // Reflow zum sicheren Neustart
-      void t.offsetWidth;
-      t.classList.add('pillar-cta-outline');
+      t.classList.remove('pillar-cta-outline'); // reset
+      void t.offsetWidth; // Reflow zum Neustart
+      t.classList.add('pillar-cta-outline');    // endlose Puls-Outline
     });
   }
-
-  function clearOutlinePulse(){
+  function stopPulse() {
     tiles.forEach(t => t.classList.remove('pillar-cta-outline'));
   }
-
-  function smoothScrollToColumns(){
+  function smoothScrollToColumns() {
     columns.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
   }
 
+  // Stoppe den Puls, sobald eine Säule geklickt wird
+  tiles.forEach(t => {
+    t.addEventListener('click', stopPulse, { passive: true });
+  });
+
   cta.addEventListener('click', (e) => {
-    // Wir behalten den href="#columns" für Accessibility, aber steuern die Sequenz selbst
-    e.preventDefault();
+    e.preventDefault(); // wir steuern die Reihenfolge manuell
 
     if (reduceMotion){
-      // Barrierearm: kein Springen, nur kurzer vis. Hinweis + direkt scrollen
-      addOutlinePulse();
-      setTimeout(() => {
-        smoothScrollToColumns();
-        clearOutlinePulse();
-      }, 300);
+      // Barrierearm: direkt scrollen, dann (statisch) hervorheben bis Klick
+      smoothScrollToColumns();
+      startPulse();
       return;
     }
 
-    // 1) Säulen springen (verdecken kurzzeitig den Button)
+    // 1) Säulen springen
     columns.classList.add('pillars-animate');
 
-    // 2) Nach dem Sprung: Pulse-Outline anzeigen
+    // 2) Nach dem Sprung: sofort scrollen
     setTimeout(() => {
       columns.classList.remove('pillars-animate');
-      addOutlinePulse();
+      smoothScrollToColumns();
 
-      // 3) Nach den Puls-Loops: scrollen
+      // 3) Nach kurzer Stabilisierung: Puls starten (läuft bis Klick)
       setTimeout(() => {
-        smoothScrollToColumns();
-        // Outline nach dem Scroll optional entfernen
-        setTimeout(clearOutlinePulse, 800);
-      }, PULSE_MS * PULSE_REP);
+        startPulse();
+      }, AFTER_SCROLL_WAIT);
 
     }, LIFT_MS);
   });
