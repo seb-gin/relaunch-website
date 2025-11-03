@@ -321,7 +321,7 @@
 
 @keyframes pillar-outline{
   0%   { box-shadow: 0 0 0 0 rgba(255,186,8,0), 0 0 0 rgba(0,0,0,0); }
-  50%  { box-shadow: 0 0 0 4px rgba(255,186,8,.55), 0 14px 30px rgba(2,23,64,.18); }
+  50%  { box-shadow: 0 0 0 6px rgba(255,186,8,.55), 0 14px 30px rgba(2,23,64,.18); }
   100% { box-shadow: 0 0 0 0 rgba(255,186,8,0), 0 0 0 rgba(0,0,0,0); }
 }
 
