@@ -291,3 +291,51 @@
     display: none !important;
   }
 }
+
+/* === Pillar Reveal – Jump + Pulse =================================== */
+
+/* Basis: Macht das Hochspringen sichtbar über dem Hero-Button */
+#columns .tile{
+  position: relative;
+  will-change: transform, box-shadow;
+  transition: transform .2s ease, box-shadow .2s ease;
+  z-index: 1;
+}
+
+/* Klasse, die während des „Sprungs“ aktiv ist */
+#columns.pillars-animate .tile{
+  animation: pillar-lift .8s cubic-bezier(.2,1.2,.2,1) both;
+  z-index: 50; /* über dem Hero-Button */
+}
+
+/* Sequenz: hoch – kurzer Peak – zurück mit leichtem Overshoot */
+@keyframes pillar-lift{
+  0%   { transform: translateY(0); }
+  35%  { transform: translateY(-30vh); }
+  55%  { transform: translateY(-33vh); } /* kleine Spitze für „verdecken“ */
+  85%  { transform: translateY(6px); }   /* mini-overshoot nach unten */
+  100% { transform: translateY(0); }
+}
+
+/* Pulsierender Signature-Rand (ohne Layout-Shift via box-shadow) */
+.pillar-cta-outline{
+  animation: pillar-outline 1.2s ease-out 0s 2;
+}
+
+@keyframes pillar-outline{
+  0%   { box-shadow: 0 0 0 0 rgba(255,186,8,0), 0 0 0 rgba(0,0,0,0); }
+  50%  { box-shadow: 0 0 0 4px rgba(255,186,8,.55), 0 14px 30px rgba(2,23,64,.18); }
+  100% { box-shadow: 0 0 0 0 rgba(255,186,8,0), 0 0 0 rgba(0,0,0,0); }
+}
+
+/* Hover bleibt dezent */
+#columns .tile:hover, #columns .tile:focus-visible{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(2,23,64,.12);
+}
+
+/* Bewegungs-reduziert: kein Springen, nur Fokus-Ring + direktes Scrollen */
+@media (prefers-reduced-motion: reduce){
+  #columns.pillars-animate .tile{ animation: none !important; }
+  .pillar-cta-outline{ animation: none !important; box-shadow: 0 0 0 3px #FFBA08; }
+}
