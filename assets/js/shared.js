@@ -426,10 +426,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const LS_SCROLL = 'av_return_scroll';
   const LS_FLAG   = 'av_restore_on_load';
 
-  // 1) Auf Übersichtsseiten: Klick auf Feature-Links speichert Kontext
-  const featureLinks = document.querySelectorAll(
-    'a[href$="1.html"], a[href$="2.html"], a[href$="3.html"], a[href$="4.html"]'
-  );
+ // 1) Auf Übersichtsseiten: Klick auf Solution-Links speichert Kontext
+const featureLinks = document.querySelectorAll(
+  // Absolute oder relative Links zu den Unterseiten unter /solutions/
+  'a[href*="/solutions/"][href$=".html"], ' +   // absolute Pfade
+  'a[href^="solutions/"][href$=".html"], '   +  // relative (z. B. solutions/...)
+  'a[href^="../solutions/"][href$=".html"], ' + // relative mit ../
+  'a[href^="../../solutions/"][href$=".html"]'  // Sicherheitsnetz (tiefer verschachtelt)
+);
+
   featureLinks.forEach(a => {
     a.addEventListener('click', () => {
       sessionStorage.setItem(LS_PATH,   location.pathname);

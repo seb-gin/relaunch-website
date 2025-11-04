@@ -248,8 +248,6 @@
 */
 
 
-
-
 /* === PORTRAIT-HINWEIS – sichtbare Ebene über allem === */
 @media screen and (max-width: 995px) and (orientation: portrait) {
   #rotate-hint {
