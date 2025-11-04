@@ -41,20 +41,26 @@ document.addEventListener('DOMContentLoaded', function () {
       });
       log('[brand->home]', target);
     }catch(e){ log('[brand->home][err]', e); }
-
-      /* === Orientation Nudge (tiny GIF hint) ==================== */
+      /* === Orientation Nudge (tiny GIF hint) — v2 robust ========= */
   (function(){
     const prefer = (document.body.getAttribute('data-orientation-prefer') || '').toLowerCase(); // 'portrait' | 'landscape'
     if(!prefer) return;
 
-    const corner = (document.body.getAttribute('data-nudge-corner') || 'br').toLowerCase();
-    const gifUrl = document.body.getAttribute('data-orientation-gif') 
-                   || '/assets/img/global/rotate_portrait.gif'; // <-- Pfad zu deinem transparenten GIF anpassen
+    // — Debug: <body data-nudge-debug="1"> zeigt den Nudge IMMER + kleinen Text
+    const DEBUG = document.body.getAttribute('data-nudge-debug') === '1';
 
-    const LS_KEY = 'av_orient_nudge_snooze_v1';
-    const SNOOZE_DAYS = 7;       // so viele Tage Ruhe nach Dismiss
-    const SHOW_DELAY_MS = 500;   // nicht bei kurzer Drehung flackern
-    const AUTO_HIDE_MS  = 4000;  // nach 4s automatisch ausblenden
+    // — Ecke: tl | tr | bl | br
+    const corner = (document.body.getAttribute('data-nudge-corner') || 'br').toLowerCase();
+
+    // — GIF: erst Body-Attribut, sonst RELATIVER Pfad (kein führendes /!)
+    //   Relativ ist sicherer, falls die Site in einem Unterverzeichnis läuft.
+    const gifUrl = document.body.getAttribute('data-orientation-gif')
+                 || 'assets/img/global/rotate_portrait.gif';
+
+    const LS_KEY       = 'av_orient_nudge_snooze_v1';
+    const SNOOZE_DAYS  = 7;
+    const SHOW_DELAY_MS= 500;
+    const AUTO_HIDE_MS = 4000;
 
     let showTimer = null;
     let hideTimer = null;
@@ -66,22 +72,39 @@ document.addEventListener('DOMContentLoaded', function () {
       return (Date.now() - v.ts) < SNOOZE_DAYS*24*60*60*1000;
     }
 
+    // — Robust: Hybrid-Erkennung, falls matchMedia zickt
+    function isLandscapeMedia(){
+      try { return window.matchMedia('(orientation: landscape)').matches; } catch(_e){ return null; }
+    }
+    function isLandscapeGeom(){
+      // iOS-zuverlässig: Vergleich der Innenmaße
+      return (window.innerWidth || 0) > (window.innerHeight || 0);
+    }
     function isLandscape(){
-      return window.matchMedia('(orientation: landscape)').matches;
+      const mm = isLandscapeMedia();
+      return (mm === true || mm === false) ? mm : isLandscapeGeom();
     }
 
     function mismatch(){
+      if (DEBUG) return true; // immer zeigen im Debug
       const land = isLandscape();
-      if(prefer === 'portrait')  return land;      // wünscht Hochformat, Gerät ist Querformat
-      if(prefer === 'landscape') return !land;     // wünscht Querformat, Gerät ist Hochformat
+      if(prefer === 'portrait')  return land;  // wünscht Hochformat, Gerät ist Querformat
+      if(prefer === 'landscape') return !land; // wünscht Querformat, Gerät ist Hochformat
       return false;
     }
 
-    // DOM erzeugen (einmalig)
+    // — DOM erzeugen
     const nudge = document.createElement('div');
     nudge.id = 'orientation-nudge';
     nudge.setAttribute('data-corner', ['tl','tr','bl','br'].includes(corner) ? corner : 'br');
-    nudge.innerHTML = `<img src="${gifUrl}" alt="Ausrichtungshinweis" decoding="async" loading="lazy">`;
+
+    // Optionaler Debug-Text (winzig)
+    const debugLabel = DEBUG ? `<div style="
+        position:absolute; inset:auto 0 -14px 0; text-align:center;
+        font:600 10px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Arial;
+        color:#000; opacity:.6;">debug</div>` : '';
+
+    nudge.innerHTML = `<img src="${gifUrl}" alt="Ausrichtungshinweis" decoding="async" loading="lazy">${debugLabel}`;
     document.body.appendChild(nudge);
 
     function hide(){
@@ -89,7 +112,6 @@ document.addEventListener('DOMContentLoaded', function () {
       nudge.classList.remove('show');
     }
     function show(){
-      // zuerst display toggeln, dann animieren
       nudge.classList.add('show');
       clearTimeout(hideTimer);
       hideTimer = setTimeout(hide, AUTO_HIDE_MS);
@@ -109,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
       lsSet({ ts: Date.now() });
     }, { passive: true });
 
-    // initial & on changes
+    // initial & on change
     schedule();
     window.addEventListener('resize', schedule);
     window.addEventListener('orientationchange', schedule);
