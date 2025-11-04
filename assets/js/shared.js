@@ -41,7 +41,81 @@ document.addEventListener('DOMContentLoaded', function () {
       });
       log('[brand->home]', target);
     }catch(e){ log('[brand->home][err]', e); }
+
+      /* === Orientation Nudge (tiny GIF hint) ==================== */
+  (function(){
+    const prefer = (document.body.getAttribute('data-orientation-prefer') || '').toLowerCase(); // 'portrait' | 'landscape'
+    if(!prefer) return;
+
+    const corner = (document.body.getAttribute('data-nudge-corner') || 'br').toLowerCase();
+    const gifUrl = document.body.getAttribute('data-orientation-gif') 
+                   || '/assets/img/global/rotate_portrait.gif'; // <-- Pfad zu deinem transparenten GIF anpassen
+
+    const LS_KEY = 'av_orient_nudge_snooze_v1';
+    const SNOOZE_DAYS = 7;       // so viele Tage Ruhe nach Dismiss
+    const SHOW_DELAY_MS = 500;   // nicht bei kurzer Drehung flackern
+    const AUTO_HIDE_MS  = 4000;  // nach 4s automatisch ausblenden
+
+    let showTimer = null;
+    let hideTimer = null;
+
+    function lsGet(){ try { return JSON.parse(localStorage.getItem(LS_KEY) || 'null'); } catch(_e){ return null; } }
+    function lsSet(v){ try { localStorage.setItem(LS_KEY, JSON.stringify(v)); } catch(_e){} }
+    function snoozed(){
+      const v = lsGet(); if(!v) return false;
+      return (Date.now() - v.ts) < SNOOZE_DAYS*24*60*60*1000;
+    }
+
+    function isLandscape(){
+      return window.matchMedia('(orientation: landscape)').matches;
+    }
+
+    function mismatch(){
+      const land = isLandscape();
+      if(prefer === 'portrait')  return land;      // wünscht Hochformat, Gerät ist Querformat
+      if(prefer === 'landscape') return !land;     // wünscht Querformat, Gerät ist Hochformat
+      return false;
+    }
+
+    // DOM erzeugen (einmalig)
+    const nudge = document.createElement('div');
+    nudge.id = 'orientation-nudge';
+    nudge.setAttribute('data-corner', ['tl','tr','bl','br'].includes(corner) ? corner : 'br');
+    nudge.innerHTML = `<img src="${gifUrl}" alt="Ausrichtungshinweis" decoding="async" loading="lazy">`;
+    document.body.appendChild(nudge);
+
+    function hide(){
+      clearTimeout(hideTimer);
+      nudge.classList.remove('show');
+    }
+    function show(){
+      // zuerst display toggeln, dann animieren
+      nudge.classList.add('show');
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(hide, AUTO_HIDE_MS);
+    }
+    function schedule(){
+      clearTimeout(showTimer);
+      hide();
+      if(snoozed()) return;
+      if(mismatch()){
+        showTimer = setTimeout(show, SHOW_DELAY_MS);
+      }
+    }
+
+    // Tap/Click -> dismiss + snooze
+    nudge.addEventListener('click', function(){
+      hide();
+      lsSet({ ts: Date.now() });
+    }, { passive: true });
+
+    // initial & on changes
+    schedule();
+    window.addEventListener('resize', schedule);
+    window.addEventListener('orientationchange', schedule);
   })();
+
+  });
 
   // ==================================
   // Back-to-top Button (nur Desktop)
