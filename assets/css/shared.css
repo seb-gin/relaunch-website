@@ -285,24 +285,17 @@ body > header .navbar-toggler-icon{ filter: invert(1) brightness(1.4); }
 }
 
 /* === Menü geöffnet === */
-.menu__toggle[aria-expanded="true"] {
+.menu__toggle.is-open {
   background: var(--toggle-fill);
   --y: 0px;
   --rot-top: 45deg;
   --rot-bot: -45deg;
   animation: av-btn-pop .42s cubic-bezier(.2,1.4,.34,1) both;
 }
+.menu__toggle.is-open .menu__icon { background-color: transparent; }
+.menu__toggle.is-open .menu__icon::before,
+.menu__toggle.is-open .menu__icon::after { background-color: var(--toggle-x); }
 
-/* Mittelstrich ausblenden */
-.menu__toggle[aria-expanded="true"] .menu__icon {
-  background-color: transparent;
-}
-
-/* Linien werden zum X */
-.menu__toggle[aria-expanded="true"] .menu__icon::before,
-.menu__toggle[aria-expanded="true"] .menu__icon::after {
-  background-color: var(--toggle-x);
-}
 
 /* Tap-Feedback */
 .menu__toggle:active {

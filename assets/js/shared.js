@@ -420,6 +420,27 @@ if (window.innerWidth >= 992) {
   window.addEventListener('scroll', onScroll, { passive: true });
 });
 
+// === Navbar-Burger sauber an Bootstrap-Collapse koppeln (verhindert Geister-Flip) ===
+document.addEventListener('DOMContentLoaded', () => {
+  const nav = document.getElementById('navMain');
+  const toggle = document.querySelector('.menu__toggle');
+  if (!nav || !toggle) return;
+
+  // Wenn die Navigation öffnet → Button bekommt .is-open
+  nav.addEventListener('show.bs.collapse', () => {
+    toggle.classList.add('is-open');
+  });
+
+  // Wenn die Navigation schließt → .is-open wieder entfernen
+  nav.addEventListener('hide.bs.collapse', () => {
+    toggle.classList.remove('is-open');
+  });
+
+  // Edge Cases (falls beim Laden bereits offen/geschlossen ist)
+  nav.addEventListener('shown.bs.collapse', () => toggle.classList.add('is-open'));
+  nav.addEventListener('hidden.bs.collapse', () => toggle.classList.remove('is-open'));
+});
+
 /* === Avineo: Return-to-Scroll (compact) ===================== */
 document.addEventListener('DOMContentLoaded', () => {
   const LS_PATH   = 'av_return_path';
