@@ -441,6 +441,33 @@ document.addEventListener('DOMContentLoaded', () => {
   nav.addEventListener('hidden.bs.collapse', () => toggle.classList.remove('is-open'));
 });
 
+// === Navbar-Burger: Hard-Guard + saubere Kopplung an Bootstrap-Collapse ===
+document.addEventListener('DOMContentLoaded', () => {
+  const nav = document.getElementById('navMain');
+  const toggle = document.querySelector('.menu__toggle');
+  if (!nav || !toggle) return;
+
+  // Nur echter Collapse-Status darf das X auslösen
+  nav.addEventListener('show.bs.collapse',  () => toggle.classList.add('is-open'));
+  nav.addEventListener('hide.bs.collapse',  () => toggle.classList.remove('is-open'));
+  nav.addEventListener('shown.bs.collapse', () => toggle.classList.add('is-open'));
+  nav.addEventListener('hidden.bs.collapse',() => toggle.classList.remove('is-open'));
+
+  // Guard: Wenn aria-expanded kurz "true" wird, der Collapse aber NICHT offen ist → sofort zurück auf Burger
+  const mo = new MutationObserver(() => {
+    const wantsOpen  = toggle.getAttribute('aria-expanded') === 'true';
+    const reallyOpen = nav.classList.contains('show');
+    if (wantsOpen && !reallyOpen) {
+      toggle.classList.remove('is-open');
+      // Reset der visuellen Variablen (falls ein fremdes CSS auf aria-expanded hört)
+      toggle.style.setProperty('--y', '7px');
+      toggle.style.setProperty('--rot-top', '0deg');
+      toggle.style.setProperty('--rot-bot', '0deg');
+    }
+  });
+  mo.observe(toggle, { attributes: true, attributeFilter: ['aria-expanded'] });
+});
+
 /* === Avineo: Return-to-Scroll (compact) ===================== */
 document.addEventListener('DOMContentLoaded', () => {
   const LS_PATH   = 'av_return_path';
