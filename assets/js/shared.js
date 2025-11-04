@@ -420,92 +420,16 @@ if (window.innerWidth >= 992) {
   window.addEventListener('scroll', onScroll, { passive: true });
 });
 
-// === Navbar-Burger: „Hard Lock“ gegen Ghost-Flip =======================
-document.addEventListener('DOMContentLoaded', () => {
-  const nav    = document.getElementById('navMain');
-  const toggle = document.querySelector('.menu__toggle');
-  if (!nav || !toggle) return;
-
-  // Saubere Kopplung an echten Collapse-Status
-  nav.addEventListener('show.bs.collapse',  () => toggle.classList.add('is-open'));
-  nav.addEventListener('shown.bs.collapse', () => toggle.classList.add('is-open'));
-  nav.addEventListener('hide.bs.collapse',  () => toggle.classList.remove('is-open'));
-  nav.addEventListener('hidden.bs.collapse',() => toggle.classList.remove('is-open'));
-
-  // HARTE Bremse: wenn aria-expanded kurz true ist, der Collapse aber NICHT offen → sofort blocken
-  const mo = new MutationObserver(() => {
-    const wantsOpen  = toggle.getAttribute('aria-expanded') === 'true';
-    const reallyOpen = nav.classList.contains('show');
-
-    if (wantsOpen && !reallyOpen) {
-      // 1) Sofort alle Transitionen aus, damit nichts sichtbar springt
-      toggle.classList.add('hard-lock');
-
-      // 2) Visuell garantiert Burger-Zustand erzwingen
-      toggle.classList.remove('is-open'); // Sicherheit
-      toggle.style.setProperty('--y', '7px');
-      toggle.style.setProperty('--rot-top', '0deg');
-      toggle.style.setProperty('--rot-bot', '0deg');
-      // Hintergrund/Balkenfarbe auf Burger zurück (falls ein CSS auf aria-expanded reagiert)
-      // (die Farben setzt der CSS-Guard unten)
-
-      // 3) Nach extrem kurzer Zeit wieder freigeben
-      setTimeout(() => {
-        toggle.classList.remove('hard-lock');
-        // Inline-Resets wieder entfernen, damit deine normalen Regeln übernehmen
-        toggle.style.removeProperty('--y');
-        toggle.style.removeProperty('--rot-top');
-        toggle.style.removeProperty('--rot-bot');
-      }, 120);
-    }
-  });
-
-  mo.observe(toggle, { attributes: true, attributeFilter: ['aria-expanded'] });
-});
-
-
-// === Navbar-Burger: Hard-Guard + saubere Kopplung an Bootstrap-Collapse ===
-document.addEventListener('DOMContentLoaded', () => {
-  const nav = document.getElementById('navMain');
-  const toggle = document.querySelector('.menu__toggle');
-  if (!nav || !toggle) return;
-
-  // Nur echter Collapse-Status darf das X auslösen
-  nav.addEventListener('show.bs.collapse',  () => toggle.classList.add('is-open'));
-  nav.addEventListener('hide.bs.collapse',  () => toggle.classList.remove('is-open'));
-  nav.addEventListener('shown.bs.collapse', () => toggle.classList.add('is-open'));
-  nav.addEventListener('hidden.bs.collapse',() => toggle.classList.remove('is-open'));
-
-  // Guard: Wenn aria-expanded kurz "true" wird, der Collapse aber NICHT offen ist → sofort zurück auf Burger
-  const mo = new MutationObserver(() => {
-    const wantsOpen  = toggle.getAttribute('aria-expanded') === 'true';
-    const reallyOpen = nav.classList.contains('show');
-    if (wantsOpen && !reallyOpen) {
-      toggle.classList.remove('is-open');
-      // Reset der visuellen Variablen (falls ein fremdes CSS auf aria-expanded hört)
-      toggle.style.setProperty('--y', '7px');
-      toggle.style.setProperty('--rot-top', '0deg');
-      toggle.style.setProperty('--rot-bot', '0deg');
-    }
-  });
-  mo.observe(toggle, { attributes: true, attributeFilter: ['aria-expanded'] });
-});
-
 /* === Avineo: Return-to-Scroll (compact) ===================== */
 document.addEventListener('DOMContentLoaded', () => {
   const LS_PATH   = 'av_return_path';
   const LS_SCROLL = 'av_return_scroll';
   const LS_FLAG   = 'av_restore_on_load';
 
- // 1) Auf Übersichtsseiten: Klick auf Solution-Links speichert Kontext
-const featureLinks = document.querySelectorAll(
-  // Absolute oder relative Links zu den Unterseiten unter /solutions/
-  'a[href*="/solutions/"][href$=".html"], ' +   // absolute Pfade
-  'a[href^="solutions/"][href$=".html"], '   +  // relative (z. B. solutions/...)
-  'a[href^="../solutions/"][href$=".html"], ' + // relative mit ../
-  'a[href^="../../solutions/"][href$=".html"]'  // Sicherheitsnetz (tiefer verschachtelt)
-);
-
+  // 1) Auf Übersichtsseiten: Klick auf Feature-Links speichert Kontext
+  const featureLinks = document.querySelectorAll(
+    'a[href$="1.html"], a[href$="2.html"], a[href$="3.html"], a[href$="4.html"]'
+  );
   featureLinks.forEach(a => {
     a.addEventListener('click', () => {
       sessionStorage.setItem(LS_PATH,   location.pathname);

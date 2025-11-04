@@ -285,17 +285,24 @@ body > header .navbar-toggler-icon{ filter: invert(1) brightness(1.4); }
 }
 
 /* === Menü geöffnet === */
-.menu__toggle.is-open {
+.menu__toggle[aria-expanded="true"] {
   background: var(--toggle-fill);
   --y: 0px;
   --rot-top: 45deg;
   --rot-bot: -45deg;
   animation: av-btn-pop .42s cubic-bezier(.2,1.4,.34,1) both;
 }
-.menu__toggle.is-open .menu__icon { background-color: transparent; }
-.menu__toggle.is-open .menu__icon::before,
-.menu__toggle.is-open .menu__icon::after { background-color: var(--toggle-x); }
 
+/* Mittelstrich ausblenden */
+.menu__toggle[aria-expanded="true"] .menu__icon {
+  background-color: transparent;
+}
+
+/* Linien werden zum X */
+.menu__toggle[aria-expanded="true"] .menu__icon::before,
+.menu__toggle[aria-expanded="true"] .menu__icon::after {
+  background-color: var(--toggle-x);
+}
 
 /* Tap-Feedback */
 .menu__toggle:active {
@@ -680,57 +687,4 @@ section[id], h2[id], h3[id], .feature[id] {
   .cookie-consent--corner { left:12px; right:12px; bottom:12px; max-width:none; }
   .cookie-consent__content{ flex-direction:column; align-items:stretch; gap:10px; }
   .cookie-consent__actions{ justify-content:flex-end; gap:8px; }
-}
-
-/* === Hard Guard: Nur .is-open darf das X rendern ====================== */
-.menu__toggle[aria-expanded="true"]:not(.is-open),
-.menu__toggle:not(.is-open) {
-  /* zurück in den Burger-Zustand erzwingen */
-  --y: 7px;
-  --rot-top: 0deg;
-  --rot-bot: 0deg;
-  background: transparent;
-}
-
-.menu__toggle[aria-expanded="true"]:not(.is-open) .menu__icon {
-  background-color: var(--toggle-line);
-}
-
-.menu__toggle[aria-expanded="true"]:not(.is-open) .menu__icon::before {
-  transform: translate(-50%, -50%) translateY(calc(-1 * var(--y))) rotate(0deg);
-  background-color: var(--toggle-line);
-}
-.menu__toggle[aria-expanded="true"]:not(.is-open) .menu__icon::after {
-  transform: translate(-50%, -50%) translateY(var(--y)) rotate(0deg);
-  background-color: var(--toggle-line);
-}
-
-/* === HARD LOCK für Burger: keine sichtbare Veränderung erlaubt ========= */
-.menu__toggle.hard-lock,
-.menu__toggle.hard-lock .menu__icon,
-.menu__toggle.hard-lock .menu__icon::before,
-.menu__toggle.hard-lock .menu__icon::after{
-  transition: none !important;
-  animation: none !important;
-}
-
-/* Wenn aria-expanded kurz true wird, aber .is-open fehlt → Erzwinge Burger-Optik */
-.menu__toggle[aria-expanded="true"]:not(.is-open),
-.menu__toggle:not(.is-open) {
-  --y: 7px !important;
-  --rot-top: 0deg !important;
-  --rot-bot: 0deg !important;
-  background: transparent !important;
-}
-
-.menu__toggle[aria-expanded="true"]:not(.is-open) .menu__icon {
-  background-color: var(--toggle-line) !important;
-}
-.menu__toggle[aria-expanded="true"]:not(.is-open) .menu__icon::before {
-  transform: translate(-50%, -50%) translateY(calc(-1 * var(--y))) rotate(0deg) !important;
-  background-color: var(--toggle-line) !important;
-}
-.menu__toggle[aria-expanded="true"]:not(.is-open) .menu__icon::after {
-  transform: translate(-50%, -50%) translateY(var(--y)) rotate(0deg) !important;
-  background-color: var(--toggle-line) !important;
 }
