@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // — GIF: erst Body-Attribut, sonst RELATIVER Pfad (kein führendes /!)
     //   Relativ ist sicherer, falls die Site in einem Unterverzeichnis läuft.
     const gifUrl = document.body.getAttribute('data-orientation-gif')
-                 || '../../assets/img/global/rotate_portrait.gif';
+                 || '../assets/img/global/rotate_portrait.gif';
 
     const LS_KEY       = 'av_orient_nudge_snooze_v1';
     const SNOOZE_DAYS  = 7;
