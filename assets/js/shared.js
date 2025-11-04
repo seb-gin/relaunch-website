@@ -420,26 +420,49 @@ if (window.innerWidth >= 992) {
   window.addEventListener('scroll', onScroll, { passive: true });
 });
 
-// === Navbar-Burger sauber an Bootstrap-Collapse koppeln (verhindert Geister-Flip) ===
+// === Navbar-Burger: „Hard Lock“ gegen Ghost-Flip =======================
 document.addEventListener('DOMContentLoaded', () => {
-  const nav = document.getElementById('navMain');
+  const nav    = document.getElementById('navMain');
   const toggle = document.querySelector('.menu__toggle');
   if (!nav || !toggle) return;
 
-  // Wenn die Navigation öffnet → Button bekommt .is-open
-  nav.addEventListener('show.bs.collapse', () => {
-    toggle.classList.add('is-open');
-  });
-
-  // Wenn die Navigation schließt → .is-open wieder entfernen
-  nav.addEventListener('hide.bs.collapse', () => {
-    toggle.classList.remove('is-open');
-  });
-
-  // Edge Cases (falls beim Laden bereits offen/geschlossen ist)
+  // Saubere Kopplung an echten Collapse-Status
+  nav.addEventListener('show.bs.collapse',  () => toggle.classList.add('is-open'));
   nav.addEventListener('shown.bs.collapse', () => toggle.classList.add('is-open'));
-  nav.addEventListener('hidden.bs.collapse', () => toggle.classList.remove('is-open'));
+  nav.addEventListener('hide.bs.collapse',  () => toggle.classList.remove('is-open'));
+  nav.addEventListener('hidden.bs.collapse',() => toggle.classList.remove('is-open'));
+
+  // HARTE Bremse: wenn aria-expanded kurz true ist, der Collapse aber NICHT offen → sofort blocken
+  const mo = new MutationObserver(() => {
+    const wantsOpen  = toggle.getAttribute('aria-expanded') === 'true';
+    const reallyOpen = nav.classList.contains('show');
+
+    if (wantsOpen && !reallyOpen) {
+      // 1) Sofort alle Transitionen aus, damit nichts sichtbar springt
+      toggle.classList.add('hard-lock');
+
+      // 2) Visuell garantiert Burger-Zustand erzwingen
+      toggle.classList.remove('is-open'); // Sicherheit
+      toggle.style.setProperty('--y', '7px');
+      toggle.style.setProperty('--rot-top', '0deg');
+      toggle.style.setProperty('--rot-bot', '0deg');
+      // Hintergrund/Balkenfarbe auf Burger zurück (falls ein CSS auf aria-expanded reagiert)
+      // (die Farben setzt der CSS-Guard unten)
+
+      // 3) Nach extrem kurzer Zeit wieder freigeben
+      setTimeout(() => {
+        toggle.classList.remove('hard-lock');
+        // Inline-Resets wieder entfernen, damit deine normalen Regeln übernehmen
+        toggle.style.removeProperty('--y');
+        toggle.style.removeProperty('--rot-top');
+        toggle.style.removeProperty('--rot-bot');
+      }, 120);
+    }
+  });
+
+  mo.observe(toggle, { attributes: true, attributeFilter: ['aria-expanded'] });
 });
+
 
 // === Navbar-Burger: Hard-Guard + saubere Kopplung an Bootstrap-Collapse ===
 document.addEventListener('DOMContentLoaded', () => {
