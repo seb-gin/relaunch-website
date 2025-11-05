@@ -158,7 +158,6 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('pageshow',          scheduleSoon);
   scheduleSoon();
 })();
-  })();
 
   // ==================================
   // Back-to-top Button (nur Desktop)
@@ -291,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       console.log && console.log('[switcher] aktiv (', isS2A ? 's2a' : 'bsc', '→', isS2A ? 'bsc' : 's2a', ')');
     } catch (e) { console.error && console.error('[switcher][err]', e); }
-  })(); // Ende DOMContentLoaded
+  }); // Ende DOMContentLoaded
 
 // ================= COOKIE CORNER + overlay click-catcher =================
 (function(){
@@ -579,4 +578,4 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   }
-});
+});})
