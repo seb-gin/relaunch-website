@@ -132,6 +132,11 @@ function snoozed(forState){
       showTimer = setTimeout(show, SHOW_DELAY_MS);
       }
     }
+    function scheduleSoon(){
+  clearTimeout(showTimer);
+  setTimeout(schedule, 220); // iOS braucht einen kurzen Delay nach dem Dreh
+}
+
 
     // Tap/Click -> dismiss + snooze
     nudge.addEventListener('click', function(){
@@ -141,7 +146,7 @@ function snoozed(forState){
     }, { passive: true });
 
     // initial & on change
-    schedule();
+    scheduleSoon();
       window.addEventListener('resize', scheduleSoon);
       window.addEventListener('orientationchange', scheduleSoon);
       document.addEventListener('visibilitychange', () => { if (!document.hidden) scheduleSoon(); });
