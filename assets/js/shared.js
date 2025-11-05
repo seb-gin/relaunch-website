@@ -54,23 +54,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // — GIF: erst Body-Attribut, sonst RELATIVER Pfad (kein führendes /!)
     //   Relativ ist sicherer, falls die Site in einem Unterverzeichnis läuft.
-    const gifUrl = document.body.getAttribute('data-orientation-gif')
-                 || '../assets/img/global/rotate_portrait.gif';
-
-    const LS_KEY       = 'av_orient_nudge_snooze_v1';
-    const SNOOZE_DAYS  = 7;
-    const SHOW_DELAY_MS= 500;
-    const AUTO_HIDE_MS = 4000;
-
+    function rootPrefix(){ const p=location.pathname.replace(/\/index\.html$/,'').replace(/\/$/,''); const d=p.split('/').filter(Boolean).length; return d>0 ? '../'.repeat(d) : ''; }
+    const gifUrl = document.body.getAttribute('data-orientation-gif') || (rootPrefix() + 'assets/img/global/rotate_portrait.gif');
+    const SHOW_DELAY_MS = 300;   // Einblend-Verzögerung gegen Flackern
+    const AUTO_HIDE_MS  = 4000;  // nach 4s wieder ausblenden
     let showTimer = null;
     let hideTimer = null;
 
-    function lsGet(){ try { return JSON.parse(localStorage.getItem(LS_KEY) || 'null'); } catch(_e){ return null; } }
-    function lsSet(v){ try { localStorage.setItem(LS_KEY, JSON.stringify(v)); } catch(_e){} }
-    function snoozed(){
-      const v = lsGet(); if(!v) return false;
-      return (Date.now() - v.ts) < SNOOZE_DAYS*24*60*60*1000;
-    }
+
+  const LS_KEY = 'av_orient_nudge_snooze_v2';           // neuer Key
+const SNOOZE_MIN = 120;                                // 120 Minuten „Ruhe“ pro falscher Orientierung
+
+function lsGet(){ try { return JSON.parse(localStorage.getItem(LS_KEY) || 'null'); } catch(_e){ return null; } }
+function lsSet(v){ try { localStorage.setItem(LS_KEY, JSON.stringify(v)); } catch(_e){} }
+
+function currentBadOrientation(){
+  // Welche Ausrichtung wäre aktuell „falsch“?
+  return (prefer === 'portrait') ? 'landscape' : (prefer === 'landscape') ? 'portrait' : '';
+}
+
+function snoozed(forState){
+  const v = lsGet(); if(!v) return false;
+  const fresh = (Date.now() - v.ts) < (SNOOZE_MIN*60*1000);
+  return fresh && v.for === forState;                 // nur blocken, wenn Snooze für GENAU diese falsche Ausrichtung gesetzt ist
+}
+
 
     // — Robust: Hybrid-Erkennung, falls matchMedia zickt
     function isLandscapeMedia(){
@@ -118,17 +126,18 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     function schedule(){
       clearTimeout(showTimer);
-      hide();
-      if(snoozed()) return;
-      if(mismatch()){
-        showTimer = setTimeout(show, SHOW_DELAY_MS);
+     hide();
+      const bad = currentBadOrientation();
+      if (mismatch() && !snoozed(bad)) {
+      showTimer = setTimeout(show, SHOW_DELAY_MS);
       }
     }
 
     // Tap/Click -> dismiss + snooze
     nudge.addEventListener('click', function(){
       hide();
-      lsSet({ ts: Date.now() });
+      lsSet({ ts: Date.now(), for: currentBadOrientation() });
+
     }, { passive: true });
 
     // initial & on change
