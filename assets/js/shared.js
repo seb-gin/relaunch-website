@@ -55,16 +55,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // 1) Pfad robust (Root oder Unterordner)
   function rootPrefix(){
-    const p = location.pathname.replace(/\/index\.html$/,'').replace(/\/$/,'');
-    const d = p.split('/').filter(Boolean).length;
-    return d>0 ? '../'.repeat(d) : '';
-  }
+  const parts = location.pathname.replace(/\/+$/,'').split('/').filter(Boolean);
+  const isFile = parts.length && /\.[a-z0-9]{2,8}$/i.test(parts[parts.length-1]);
+  const depth  = isFile ? (parts.length - 1) : parts.length; // nur Verzeichnisse zählen
+  return depth > 0 ? '../'.repeat(depth) : '';
+}
+
   const gifUrl = document.body.getAttribute('data-orientation-gif')
                || (rootPrefix() + 'assets/img/global/rotate_portrait.gif');
 
   // 2) Timings & State
   const SHOW_DELAY_MS = 300;   // kleine Verzögerung gegen Flackern
-  const AUTO_HIDE_MS  = 4000;  // nach 4s ausblenden
   let showTimer = null;
   let hideTimer = null;
 
@@ -122,16 +123,17 @@ document.addEventListener('DOMContentLoaded', function () {
   function show(){
     nudge.classList.add('show');
     clearTimeout(hideTimer);
-    hideTimer = setTimeout(hide, AUTO_HIDE_MS);
   }
-  function schedule(){
-    clearTimeout(showTimer);
+ function schedule(){
+  clearTimeout(showTimer);
+  const bad = currentBadOrientation();
+  if (mismatch() && !snoozed(bad)) {
+    showTimer = setTimeout(show, SHOW_DELAY_MS);
+  } else {
     hide();
-    const bad = currentBadOrientation();
-    if (mismatch() && !snoozed(bad)) {
-      showTimer = setTimeout(show, SHOW_DELAY_MS);
-    }
   }
+}
+
   function scheduleSoon(){
     clearTimeout(showTimer);
     // optionales Debug-Log – zum Testen aktiv lassen, später gern entfernen:
@@ -456,6 +458,7 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('resize', toggleHint);
   window.addEventListener('orientationchange', () => setTimeout(toggleHint, 200));
 })();
+
 // ==========================================
 // NAVBAR SCROLL / SHRINK / HIDE (Desktop + Mobile)
 // ==========================================
