@@ -41,11 +41,12 @@ document.addEventListener('DOMContentLoaded', function () {
       });
       log('[brand->home]', target);
     }catch(e){ log('[brand->home][err]', e); }
-
+  })();
 
     /* === Orientation Nudge (tiny GIF hint) — v3 final ============ */
 (function(){
   // 0) Seiteneinstellung
+  console.log('[nudge] init');
   const prefer = (document.body.getAttribute('data-orientation-prefer') || '').toLowerCase(); // 'portrait'|'landscape'
   if(!prefer) return;
 
@@ -134,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function scheduleSoon(){
     clearTimeout(showTimer);
     // optionales Debug-Log – zum Testen aktiv lassen, später gern entfernen:
-    if (DEBUG) try { console.log('[nudge] scheduleSoon'); } catch(_){}
+    console.log('[nudge] scheduleSoon fired');
     setTimeout(schedule, 220); // iOS braucht kurzen Delay nach Dreh
   }
 
@@ -284,8 +285,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       console.log && console.log('[switcher] aktiv (', isS2A ? 's2a' : 'bsc', '→', isS2A ? 'bsc' : 's2a', ')');
     } catch (e) { console.error && console.error('[switcher][err]', e); }
-  })();
-}); // Ende DOMContentLoaded
+  })(); // Ende DOMContentLoaded
 
 // ================= COOKIE CORNER + overlay click-catcher =================
 (function(){
