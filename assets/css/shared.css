@@ -693,8 +693,7 @@ section[id], h2[id], h3[id], .feature[id] {
 #orientation-nudge {
   position: fixed;
   z-index: 2147483000;
-  width: var(--nudge-size, 72px);
-  height: var(--nudge-size, 72px);
+--nudge-size: 100px;
   opacity: 0;
   transform: translateY(8px);
   pointer-events: auto;
