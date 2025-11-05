@@ -41,120 +41,116 @@ document.addEventListener('DOMContentLoaded', function () {
       });
       log('[brand->home]', target);
     }catch(e){ log('[brand->home][err]', e); }
-      /* === Orientation Nudge (tiny GIF hint) — v2 robust ========= */
-  (function(){
-    const prefer = (document.body.getAttribute('data-orientation-prefer') || '').toLowerCase(); // 'portrait' | 'landscape'
-    if(!prefer) return;
-
-    // — Debug: <body data-nudge-debug="1"> zeigt den Nudge IMMER + kleinen Text
-    const DEBUG = document.body.getAttribute('data-nudge-debug') === '1';
-
-    // — Ecke: tl | tr | bl | br
-    const corner = (document.body.getAttribute('data-nudge-corner') || 'br').toLowerCase();
-
-    // — GIF: erst Body-Attribut, sonst RELATIVER Pfad (kein führendes /!)
-    //   Relativ ist sicherer, falls die Site in einem Unterverzeichnis läuft.
-    function rootPrefix(){ const p=location.pathname.replace(/\/index\.html$/,'').replace(/\/$/,''); const d=p.split('/').filter(Boolean).length; return d>0 ? '../'.repeat(d) : ''; }
-    const gifUrl = document.body.getAttribute('data-orientation-gif') || (rootPrefix() + 'assets/img/global/rotate_portrait.gif');
-    const SHOW_DELAY_MS = 300;   // Einblend-Verzögerung gegen Flackern
-    const AUTO_HIDE_MS  = 4000;  // nach 4s wieder ausblenden
-    let showTimer = null;
-    let hideTimer = null;
 
 
-  const LS_KEY = 'av_orient_nudge_snooze_v2';           // neuer Key
-const SNOOZE_MIN = 120;                                // 120 Minuten „Ruhe“ pro falscher Orientierung
+    /* === Orientation Nudge (tiny GIF hint) — v3 final ============ */
+(function(){
+  // 0) Seiteneinstellung
+  const prefer = (document.body.getAttribute('data-orientation-prefer') || '').toLowerCase(); // 'portrait'|'landscape'
+  if(!prefer) return;
 
-function lsGet(){ try { return JSON.parse(localStorage.getItem(LS_KEY) || 'null'); } catch(_e){ return null; } }
-function lsSet(v){ try { localStorage.setItem(LS_KEY, JSON.stringify(v)); } catch(_e){} }
+  const DEBUG  = document.body.getAttribute('data-nudge-debug') === '1';
+  const corner = (document.body.getAttribute('data-nudge-corner') || 'br').toLowerCase();
 
-function currentBadOrientation(){
-  // Welche Ausrichtung wäre aktuell „falsch“?
-  return (prefer === 'portrait') ? 'landscape' : (prefer === 'landscape') ? 'portrait' : '';
-}
+  // 1) Pfad robust (Root oder Unterordner)
+  function rootPrefix(){
+    const p = location.pathname.replace(/\/index\.html$/,'').replace(/\/$/,'');
+    const d = p.split('/').filter(Boolean).length;
+    return d>0 ? '../'.repeat(d) : '';
+  }
+  const gifUrl = document.body.getAttribute('data-orientation-gif')
+               || (rootPrefix() + 'assets/img/global/rotate_portrait.gif');
 
-function snoozed(forState){
-  const v = lsGet(); if(!v) return false;
-  const fresh = (Date.now() - v.ts) < (SNOOZE_MIN*60*1000);
-  return fresh && v.for === forState;                 // nur blocken, wenn Snooze für GENAU diese falsche Ausrichtung gesetzt ist
-}
+  // 2) Timings & State
+  const SHOW_DELAY_MS = 300;   // kleine Verzögerung gegen Flackern
+  const AUTO_HIDE_MS  = 4000;  // nach 4s ausblenden
+  let showTimer = null;
+  let hideTimer = null;
 
+  // 3) Snooze pro falscher Orientierung (z. B. nur für Landscape “stumm”)
+  const LS_KEY = 'av_orient_nudge_snooze_v2';
+  const SNOOZE_MIN = 120; // 120 Minuten
+  function lsGet(){ try { return JSON.parse(localStorage.getItem(LS_KEY) || 'null'); } catch(_e){ return null; } }
+  function lsSet(v){ try { localStorage.setItem(LS_KEY, JSON.stringify(v)); } catch(_e){} }
+  function currentBadOrientation(){
+    return (prefer === 'portrait') ? 'landscape' : (prefer === 'landscape') ? 'portrait' : '';
+  }
+  function snoozed(forState){
+    const v = lsGet(); if(!v) return false;
+    const fresh = (Date.now() - v.ts) < (SNOOZE_MIN*60*1000);
+    return fresh && v.for === forState;
+  }
 
-    // — Robust: Hybrid-Erkennung, falls matchMedia zickt
-    function isLandscapeMedia(){
-      try { return window.matchMedia('(orientation: landscape)').matches; } catch(_e){ return null; }
-    }
-    function isLandscapeGeom(){
-      // iOS-zuverlässig: Vergleich der Innenmaße
-      return (window.innerWidth || 0) > (window.innerHeight || 0);
-    }
-    function isLandscape(){
-      const mm = isLandscapeMedia();
-      return (mm === true || mm === false) ? mm : isLandscapeGeom();
-    }
+  // 4) Orientation-Erkennung
+  function isLandscapeMedia(){
+    try { return window.matchMedia('(orientation: landscape)').matches; } catch(_e){ return null; }
+  }
+  function isLandscapeGeom(){ return (window.innerWidth||0) > (window.innerHeight||0); }
+  function isLandscape(){
+    const mm = isLandscapeMedia();
+    return (mm === true || mm === false) ? mm : isLandscapeGeom();
+  }
+  function mismatch(){
+    if (DEBUG) return true;
+    const land = isLandscape();
+    if(prefer === 'portrait')  return land;   // Seite will Portrait, Gerät ist Landscape
+    if(prefer === 'landscape') return !land;  // Seite will Landscape, Gerät ist Portrait
+    return false;
+  }
 
-    function mismatch(){
-      if (DEBUG) return true; // immer zeigen im Debug
-      const land = isLandscape();
-      if(prefer === 'portrait')  return land;  // wünscht Hochformat, Gerät ist Querformat
-      if(prefer === 'landscape') return !land; // wünscht Querformat, Gerät ist Hochformat
-      return false;
-    }
-
-    // — DOM erzeugen
-    const nudge = document.createElement('div');
+  // 5) DOM nur 1x erzeugen (idempotent)
+  let nudge = document.getElementById('orientation-nudge');
+  if(!nudge){
+    nudge = document.createElement('div');
     nudge.id = 'orientation-nudge';
     nudge.setAttribute('data-corner', ['tl','tr','bl','br'].includes(corner) ? corner : 'br');
-
-    // Optionaler Debug-Text (winzig)
-    const debugLabel = DEBUG ? `<div style="
-        position:absolute; inset:auto 0 -14px 0; text-align:center;
-        font:600 10px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Arial;
-        color:#000; opacity:.6;">debug</div>` : '';
-
+    const debugLabel = DEBUG ? `<div style="position:absolute; inset:auto 0 -14px 0; text-align:center; font:600 10px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Arial; color:#000; opacity:.6;">debug</div>` : '';
     nudge.innerHTML = `<img src="${gifUrl}" alt="Ausrichtungshinweis" decoding="async" loading="lazy">${debugLabel}`;
     document.body.appendChild(nudge);
+  } else {
+    // falls aus Tests vorhanden: Bildquelle aktualisieren
+    const img = nudge.querySelector('img');
+    if(img && img.getAttribute('src') !== gifUrl) img.setAttribute('src', gifUrl);
+  }
 
-    function hide(){
-      clearTimeout(hideTimer);
-      nudge.classList.remove('show');
-    }
-    function show(){
-      nudge.classList.add('show');
-      clearTimeout(hideTimer);
-      hideTimer = setTimeout(hide, AUTO_HIDE_MS);
-    }
-    function schedule(){
-      clearTimeout(showTimer);
-     hide();
-      const bad = currentBadOrientation();
-      if (mismatch() && !snoozed(bad)) {
+  // 6) Show/Hide + Scheduling (mit iOS-Delay)
+  function hide(){
+    clearTimeout(hideTimer);
+    nudge.classList.remove('show');
+  }
+  function show(){
+    nudge.classList.add('show');
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(hide, AUTO_HIDE_MS);
+  }
+  function schedule(){
+    clearTimeout(showTimer);
+    hide();
+    const bad = currentBadOrientation();
+    if (mismatch() && !snoozed(bad)) {
       showTimer = setTimeout(show, SHOW_DELAY_MS);
-      }
     }
-    function scheduleSoon(){
-  clearTimeout(showTimer);
-  setTimeout(schedule, 220); // iOS braucht einen kurzen Delay nach dem Dreh
-}
+  }
+  function scheduleSoon(){
+    clearTimeout(showTimer);
+    // optionales Debug-Log – zum Testen aktiv lassen, später gern entfernen:
+    if (DEBUG) try { console.log('[nudge] scheduleSoon'); } catch(_){}
+    setTimeout(schedule, 220); // iOS braucht kurzen Delay nach Dreh
+  }
 
+  // 7) Tap = Snooze setzen
+  nudge.addEventListener('click', function(){
+    hide();
+    lsSet({ ts: Date.now(), for: currentBadOrientation() });
+  }, { passive: true });
 
-    // Tap/Click -> dismiss + snooze
-    nudge.addEventListener('click', function(){
-      hide();
-      lsSet({ ts: Date.now(), for: currentBadOrientation() });
-
-    }, { passive: true });
-
-    // initial & on change
-    scheduleSoon();
-      window.addEventListener('resize', scheduleSoon);
-      window.addEventListener('orientationchange', scheduleSoon);
-      document.addEventListener('visibilitychange', () => { if (!document.hidden) scheduleSoon(); });
-      window.addEventListener('pageshow', scheduleSoon); // für bfcache/iOS
-      scheduleSoon(); // initialer Anstoß mit Delay
-
-  })();
-
+  // 8) Listener + initialer Trigger (delayed!)
+  window.addEventListener('resize',            scheduleSoon);
+  window.addEventListener('orientationchange', scheduleSoon);
+  document.addEventListener('visibilitychange',()=>{ if(!document.hidden) scheduleSoon(); });
+  window.addEventListener('pageshow',          scheduleSoon);
+  scheduleSoon();
+})();
   });
 
   // ==================================
