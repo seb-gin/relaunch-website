@@ -290,6 +290,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       console.log && console.log('[switcher] aktiv (', isS2A ? 's2a' : 'bsc', '→', isS2A ? 'bsc' : 's2a', ')');
     } catch (e) { console.error && console.error('[switcher][err]', e); }
+  })();
   }); // Ende DOMContentLoaded
 
 // ================= COOKIE CORNER + overlay click-catcher =================
@@ -578,4 +579,4 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   }
-});})
+});
