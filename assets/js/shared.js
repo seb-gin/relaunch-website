@@ -49,6 +49,10 @@ document.addEventListener('DOMContentLoaded', function () {
   console.log('[nudge] init');
   const prefer = (document.body.getAttribute('data-orientation-prefer') || '').toLowerCase(); // 'portrait'|'landscape'
   if(!prefer) return;
+  // nur auf Phones aktivieren (kein Hover, grober Pointer, schmale Breite)
+  const IS_PHONE = window.matchMedia('(hover: none) and (pointer: coarse) and (max-width: 600px)').matches;
+  if(!IS_PHONE) return;
+
 
   const DEBUG  = document.body.getAttribute('data-nudge-debug') === '1';
   const corner = (document.body.getAttribute('data-nudge-corner') || 'br').toLowerCase();
