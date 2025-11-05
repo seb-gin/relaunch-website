@@ -537,46 +537,75 @@ if (window.innerWidth >= 992) {
   window.addEventListener('scroll', onScroll, { passive: true });
 });
 
-/* === Avineo: Return-to-Scroll (compact) ===================== */
+/* === Avineo: Return-to-Scroll — v4 (scoped + solutions/) ====== */
 document.addEventListener('DOMContentLoaded', () => {
-  const LS_PATH   = 'av_return_path';
-  const LS_SCROLL = 'av_return_scroll';
-  const LS_FLAG   = 'av_restore_on_load';
+  const KEY   = 'av_return_v4';
+  const FLAG  = 'av_restore_on_load';
+  const SEC   = (document.body.dataset.section || '').toLowerCase(); // 'a'|'b'|''
 
-  // 1) Auf Übersichtsseiten: Klick auf Feature-Links speichert Kontext
-  const featureLinks = document.querySelectorAll(
-    'a[href$="1.html"], a[href$="2.html"], a[href$="3.html"], a[href$="4.html"]'
-  );
-  featureLinks.forEach(a => {
-    a.addEventListener('click', () => {
-      sessionStorage.setItem(LS_PATH,   location.pathname);
-      sessionStorage.setItem(LS_SCROLL, String(window.scrollY));
-    }, { passive: true });
-  });
+  // Übersicht erkennen: /bsc/index.html oder /s2a/index.html (auch ohne index.html)
+  const isOverview = /\/(s2a|bsc)\/(index\.html)?$/i.test(location.pathname);
 
-  // 2) Auf Feature-Seiten: "Zurück"-Button verdrahten
+  // Basisverzeichnis der Übersicht (z.B. "/bsc/" oder "/s2a/")
+  const baseDir = location.pathname.replace(/index\.html$/i, '').replace(/[^/]+$/, '');
+  // Gesuchte Ziel-Pfade liegen unter ".../solutions/*.html"
+  function isSolutionsLink(a){
+    try {
+      const u = new URL(a.getAttribute('href'), location.href);
+      return u.pathname.startsWith(baseDir + 'solutions/')
+          && u.pathname.endsWith('.html');
+    } catch(_){ return false; }
+  }
+
+  function saveReturnPoint() {
+    const payload = {
+      path: location.pathname,        // exakter Pfad der Übersicht
+      section: SEC,                   // a/b zur Absicherung
+      scroll: window.scrollY,         // aktuelle Scrollposition
+      ts: Date.now()
+    };
+    try { sessionStorage.setItem(KEY, JSON.stringify(payload)); } catch(_){}
+  }
+
+  // 1) Auf Übersichtsseiten: nur Links unter /solutions/ erfassen (gleiche Section)
+  if (isOverview) {
+    const links = Array.from(document.querySelectorAll('a[href]')).filter(isSolutionsLink);
+    links.forEach(a => a.addEventListener('click', saveReturnPoint, { passive: true }));
+  }
+
+  // 2) Auf Feature-Seiten: [data-back] korrekt verdrahten
   const backBtn = document.querySelector('[data-back]');
   if (backBtn) {
-    const savedPath = sessionStorage.getItem(LS_PATH);
-    const fallback  = backBtn.getAttribute('data-fallback') || '../index.html';
-    backBtn.setAttribute('href', savedPath || fallback);
+    let saved = null;
+    try { saved = JSON.parse(sessionStorage.getItem(KEY) || 'null'); } catch(_){}
+    const fallback = backBtn.getAttribute('data-fallback') || '../index.html';
+    const targetHref = (saved && saved.path) ? saved.path : fallback;
 
+    backBtn.setAttribute('href', targetHref);
     backBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      sessionStorage.setItem(LS_FLAG, '1');
-      location.href = savedPath || fallback;
+      if (saved) {
+        try { sessionStorage.setItem(FLAG, '1'); } catch(_){}
+      }
+      location.href = targetHref;
     });
   }
 
-  // 3) Auf Zielseite: Scrollposition wiederherstellen
-  if (sessionStorage.getItem(LS_FLAG) === '1') {
-    const savedPath = sessionStorage.getItem(LS_PATH);
-    if (savedPath === location.pathname) {
-      const y = Number(sessionStorage.getItem(LS_SCROLL) || 0);
+  // 3) Auf Ziel-Übersicht: Scrollposition wiederherstellen (nur wenn path & section passen)
+  if (sessionStorage.getItem(FLAG) === '1') {
+    let saved = null;
+    try { saved = JSON.parse(sessionStorage.getItem(KEY) || 'null'); } catch(_){}
+    const samePath    = !!saved && saved.path === location.pathname;
+    const sameSection = !!saved && (saved.section === SEC || (!saved.section && !SEC));
+
+    if (samePath && sameSection) {
+      try { history.scrollRestoration = 'manual'; } catch(_){}
       requestAnimationFrame(() => {
-        window.scrollTo({ top: y, behavior: 'smooth' });
-        sessionStorage.removeItem(LS_FLAG);
+        window.scrollTo({ top: Number(saved.scroll || 0), behavior: 'auto' });
+        try { sessionStorage.removeItem(FLAG); } catch(_){}
       });
+    } else {
+      try { sessionStorage.removeItem(FLAG); } catch(_){}
     }
   }
 });
