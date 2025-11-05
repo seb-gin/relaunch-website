@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('pageshow',          scheduleSoon);
   scheduleSoon();
 })();
-  });
+  })();
 
   // ==================================
   // Back-to-top Button (nur Desktop)
