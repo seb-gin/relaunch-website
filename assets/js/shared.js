@@ -142,8 +142,12 @@ function snoozed(forState){
 
     // initial & on change
     schedule();
-    window.addEventListener('resize', schedule);
-    window.addEventListener('orientationchange', schedule);
+      window.addEventListener('resize', scheduleSoon);
+      window.addEventListener('orientationchange', scheduleSoon);
+      document.addEventListener('visibilitychange', () => { if (!document.hidden) scheduleSoon(); });
+      window.addEventListener('pageshow', scheduleSoon); // für bfcache/iOS
+      scheduleSoon(); // initialer Anstoß mit Delay
+
   })();
 
   });

@@ -695,10 +695,10 @@ section[id], h2[id], h3[id], .feature[id] {
   z-index: 2147483000;
   width: var(--nudge-size, 72px);
   height: var(--nudge-size, 72px);
-  opacity: 0;
-  transform: translateY(8px);
+  opacity: 1;
+  transform: translateY(0px);
   pointer-events: auto; /* damit Tap zum Dismiss geht */
-  display: none;        /* per JS -> block */
+  display: block;        /* per JS -> block */
   transition: opacity .25s ease, transform .25s ease;
 }
 
