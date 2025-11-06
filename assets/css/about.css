@@ -1,4 +1,12 @@
 /* === ABOUT (nur das Nötigste) =============================== */
+blockquote {
+  border-left: 4px solid var(--brand);
+  padding-left: 1rem;
+  color: var(--ink);
+  font-size: 1.05rem;
+  font-style: italic;
+  opacity: 0.9;
+}
 
 /* Rundes Portrait, responsive Größe */
 .about-portrait {
