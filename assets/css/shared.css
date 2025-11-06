@@ -102,7 +102,17 @@ footer,
 }
 
 .container-wider{ max-width: var(--page-max); margin-inline: auto; }
-header > .container, footer > .container, .container, .container-wider{ padding-inline: 0; }
+header > .container, footer > .container, .container, .container-wider{ padding-inline: 0; 
+}
+
+blockquote {
+  border-left: 4px solid var(--brand);
+  padding-left: 1rem;
+  color: var(--ink);
+  font-size: 1.05rem;
+  font-style: italic;
+  opacity: 0.9;
+}
 
 /* ================= NAVBAR ================= */
 /* === NAVBAR SCROLL BEHAVIOR === */
