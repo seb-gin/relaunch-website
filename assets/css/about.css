@@ -94,3 +94,33 @@
   .about-logo-chip { width: calc(var(--main-size) / 3); height: calc(var(--main-size) / 3); }
   .about-logo-chip img { height: calc(var(--main-size) / 5.5); }
 }
+
+/* === ABOUT: Zwei Dropdown-Spalten ========================== */
+#about-extras .accordion-item{
+  border: 1px solid color-mix(in oklab, var(--ink) 18%, transparent);
+  border-radius: var(--radius);
+  background: var(--bg);
+  overflow: hidden;
+}
+
+#about-extras .accordion-button{
+  font-weight: 700;
+  border: 0;
+  outline: 0;
+}
+#about-extras .accordion-button:not(.collapsed){
+  background: color-mix(in oklab, var(--brand) 7%, var(--bg));
+  box-shadow: none;
+}
+
+#about-extras .blockquote{
+  padding-left: 1rem;
+  border-left: 4px solid var(--brand);
+}
+#about-extras .blockquote-footer{
+  color: #64748b; /* dezent */
+}
+
+#about-extras .offerings-list h4{
+  font-weight: 600;
+}
