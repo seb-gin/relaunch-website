@@ -460,7 +460,7 @@ footer {
 /* ================= BACK TO TOP ================= */
 .to-top{
   position: fixed;
-  inset: auto 24px 24px auto;
+  inset: auto 24px 72px auto;
   width: var(--to-top-size);
   height: var(--to-top-size);
   border-radius: 9999px;
