@@ -415,6 +415,27 @@ body > header .navbar-toggler-icon{ filter: invert(1) brightness(1.4); }
 /* ================= FOOTER ================= */
 .site-footer{ border-top:1px solid #e5e7eb; }
 .site-footer .legal{ gap:.75rem; }
+/* === FOOTER: Social Icons =============================== */
+.footer-social i {
+  font-size: 1.2rem; /* klein & elegant */
+  color: color-mix(in oklab, var(--ink) 25%, white);
+  transition: color 0.25s ease;
+}
+
+.footer-social a:hover i {
+  color: var(--brand);
+}
+
+footer {
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .footer-social {
+    margin-top: 0.75rem;
+    justify-content: flex-start;
+  }
+}
 
 /* ================= BUTTONS ================= */
 .btn-primary{
